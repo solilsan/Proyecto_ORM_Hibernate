@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
+import java.awt.*;
 
 public class VentanaGestionProveedores extends JFrame{
     private JPanel panel1;
@@ -109,11 +110,13 @@ public class VentanaGestionProveedores extends JFrame{
         // Boton modificar
         JButton jbModify = new JButton("Modificar");
         jbModify.setBounds(290, 240, 100, 40);
+        jbModify.setEnabled(false);
         panel1.add(jbModify);
 
         // Boton eliminar
         JButton jbDelete = new JButton("Eliminar");
         jbDelete.setBounds(400, 240, 100, 40);
+        jbDelete.setEnabled(false);
         panel1.add(jbDelete);
 
         // Ejecución del boton limpiar
@@ -173,6 +176,103 @@ public class VentanaGestionProveedores extends JFrame{
         JLabel lbl2 = new JLabel("LISTA DE PROVEEDORES - UTILIZA LOS BOTONES PARA IR DE UN REG A OTRO");
         lbl2.setBounds(20, 20, 450, 14);
         panel2.add(lbl2);
+
+        // Codigo proveedor
+        JLabel jlCodProvVer = new JLabel("Código del Proveedor:");
+        jlCodProvVer.setBounds(90, 60, 200, 20);
+        panel2.add(jlCodProvVer);
+        JTextField jtCodProvVer = new JTextField();
+        jtCodProvVer.setBounds(240, 60, 100, 20);
+        jtCodProvVer.setEditable(false);
+        panel2.add(jtCodProvVer);
+
+        // Nombre proveedor
+        JLabel jlNombreVer = new JLabel("Nombre:");
+        jlNombreVer.setBounds(90, 90, 200, 20);
+        panel2.add(jlNombreVer);
+        JTextField jtNombreVer = new JTextField();
+        jtNombreVer.setBounds(180, 90, 200, 20);
+        jtNombreVer.setEditable(false);
+        panel2.add(jtNombreVer);
+
+        // Apellidos proveedor
+        JLabel jlApellidosVer = new JLabel("Apellidos:");
+        jlApellidosVer.setBounds(90, 120, 200, 20);
+        panel2.add(jlApellidosVer);
+        JTextField jtApellidosVer = new JTextField();
+        jtApellidosVer.setBounds(180, 120, 240, 20);
+        jtApellidosVer.setEditable(false);
+        panel2.add(jtApellidosVer);
+
+        // Direccion proveedor
+        JLabel jlDirVer = new JLabel("Dirección:");
+        jlDirVer.setBounds(90, 150, 200, 20);
+        panel2.add(jlDirVer);
+        JTextField jtDirVer = new JTextField();
+        jtDirVer.setBounds(180, 150, 280, 20);
+        jtDirVer.setEditable(false);
+        panel2.add(jtDirVer);
+
+        // Resgistro
+        JLabel jlReg = new JLabel("REG:");
+        jlReg.setBounds(80, 200, 40, 20);
+        panel2.add(jlReg);
+
+        // Resgistro actual
+        JTextField jtpag1 = new JTextField();
+        jtpag1.setBounds(120, 200, 40, 20);
+        jtpag1.setText("0");
+        jtpag1.setHorizontalAlignment(JTextField.CENTER);
+        jtpag1.setEditable(false);
+        panel2.add(jtpag1);
+
+        // Barra entre el numero de registros
+        JLabel jlBarra = new JLabel("/");
+        jlBarra.setBounds(170, 200, 10, 20);
+        panel2.add(jlBarra);
+
+        // Resgistros totales
+        JTextField jtpag2 = new JTextField();
+        jtpag2.setBounds(180, 200, 40, 20);
+        jtpag2.setText("0");
+        jtpag2.setHorizontalAlignment(JTextField.CENTER);
+        jtpag2.setEditable(false);
+        panel2.add(jtpag2);
+
+        // Boton primer registro
+        JButton jbFistReg = new JButton("|<<");
+        jbFistReg.setBounds(240, 195, 55, 30);
+        jbFistReg.setEnabled(false);
+        panel2.add(jbFistReg);
+
+        // Boton registro anterior
+        JButton jbMesReg = new JButton("<<");
+        jbMesReg.setBounds(300, 195, 55, 30);
+        jbMesReg.setEnabled(false);
+        panel2.add(jbMesReg);
+
+        // Boton registro siguiente
+        JButton jbSigReg = new JButton(">>");
+        jbSigReg.setBounds(360, 195, 55, 30);
+        jbSigReg.setEnabled(false);
+        panel2.add(jbSigReg);
+
+        // Boton ultimo registro
+        JButton jbLastReg = new JButton(">>|");
+        jbLastReg.setBounds(420, 195, 55, 30);
+        jbLastReg.setEnabled(false);
+        panel2.add(jbLastReg);
+
+        // Boton ejecutar consulta
+        JButton jbEjecuteCon = new JButton("Ejecutar Consulta");
+        jbEjecuteCon.setBounds(100, 250, 280, 40);
+        panel2.add(jbEjecuteCon);
+
+        // Boton baja
+        JButton jbBaja = new JButton("Baja");
+        jbBaja.setBounds(390, 250, 60, 40);
+        jbBaja.setEnabled(false);
+        panel2.add(jbBaja);
 
     }
 

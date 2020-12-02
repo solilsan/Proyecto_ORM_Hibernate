@@ -64,7 +64,7 @@ public class VentanaPrincipal extends JFrame {
         proveedoresConsultaMenu.add(proveedoresConsultaMenuPorNombre);
         proveedoresConsultaMenu.add(proveedoresConsultaMenuPorDireccion);
 
-            setJMenuBar(menuBar);
+        setJMenuBar(menuBar);
     }
 
 }

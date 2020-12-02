@@ -10,7 +10,7 @@ import org.hibernate.cfg.Configuration;
 
 public class Main {
 
-    static Configuration cfg =	new Configuration().configure();
+    public static Configuration cfg = new Configuration().configure();
 
     public static void main(String[] args) {
 

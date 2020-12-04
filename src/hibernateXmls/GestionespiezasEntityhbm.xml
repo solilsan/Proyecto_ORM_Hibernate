@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.company.hibernateClass.GestionespiezasEntity" table="GESTIONESPIEZAS" schema="proyecthiber">
+        <id name="codigo">
+            <column name="CODIGO" sql-type="int"/>
+        </id>
+        <property name="codpieza">
+            <column name="CODPIEZA" sql-type="varchar(6)" length="6"/>
+        </property>
+        <property name="codgestion">
+            <column name="CODGESTION" sql-type="int"/>
+        </property>
+    </class>
+</hibernate-mapping>

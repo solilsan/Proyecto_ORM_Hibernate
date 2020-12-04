@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:mysql://127.0.0.1:3307/proyecthiber</property>
+    <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="dialect">
+      org.hibernate.dialect.H2Dialect
+    </property>
+    <property name="connection.username">root</property>
+    <property name="connection.password">admin</property>
+
+    <mapping class="com.company.hibernateClass.GestionesEntity"/>
+    <mapping resource="hibernateXmls/GestionesEntityhbm.xml"/>
+    <mapping resource="hibernateXmls/GestionespiezasEntityhbm.xml"/>
+    <mapping class="com.company.hibernateClass.GestionespiezasEntity"/>
+    <mapping resource="hibernateXmls/PiezasEntityhbm.xml"/>
+    <mapping class="com.company.hibernateClass.PiezasEntity"/>
+    <mapping class="com.company.hibernateClass.ProveedoresEntity"/>
+    <mapping resource="hibernateXmls/ProveedoresEntityhbm.xml"/>
+    <mapping class="com.company.hibernateClass.ProyectosEntity"/>
+    <mapping resource="hibernateXmls/ProyectosEntityhbm.xml"/>
+
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>

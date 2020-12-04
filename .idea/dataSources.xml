@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="ProyectoHibernate@www.db4free.net" uuid="2adcf1a9-54d7-4073-891b-34619ce2c231">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://www.db4free.net:3306/proyecthiber</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="proyecthiber@localhost" uuid="e23e5aef-6699-41c9-acb4-d759cf29b94e">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3307/proyecthiber</jdbc-url>
+    </data-source>
+  </component>
+</project>

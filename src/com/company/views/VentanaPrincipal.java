@@ -6,8 +6,12 @@ import java.awt.event.KeyEvent;
 public class VentanaPrincipal extends JFrame {
 
     private JPanel panel1;
+    private JLabel back;
 
     public VentanaPrincipal() {
+
+        ImageIcon imgIcon = new ImageIcon("resources/ventanaprincipalbg.png");
+        back.setIcon(imgIcon);
 
         add(panel1);
 
@@ -55,8 +59,29 @@ public class VentanaPrincipal extends JFrame {
 
         var proveedoresConsultaMenu = new JMenu("Consulta de Proveedores");
         var proveedoresConsultaMenuPorCodigo = new JMenuItem("Por Código");
+        proveedoresConsultaMenuPorCodigo.addActionListener(
+                (event) -> {
+                    VentanaConsultaProveedores vcp = new VentanaConsultaProveedores("Consulta de Proveedores por Código", 0);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
         var proveedoresConsultaMenuPorNombre = new JMenuItem("Por Nombre");
+        proveedoresConsultaMenuPorNombre.addActionListener(
+                (event) -> {
+                    VentanaConsultaProveedores vcp = new VentanaConsultaProveedores("Consulta de Proveedores por Nombre", 1);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
         var proveedoresConsultaMenuPorDireccion = new JMenuItem("Por Dirección");
+        proveedoresConsultaMenuPorDireccion.addActionListener(
+                (event) -> {
+                    VentanaConsultaProveedores vcp = new VentanaConsultaProveedores("Consulta de Proveedores por Dirección", 2);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
 
         proveedoresMenu.add(proveedoresGestionItem);
         proveedoresMenu.add(proveedoresConsultaMenu);

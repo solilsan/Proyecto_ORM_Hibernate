@@ -7,5 +7,11 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://www.db4free.net:3306/proyecthiber</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="proyecthiber@localhost" uuid="e23e5aef-6699-41c9-acb4-d759cf29b94e">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3307/proyecthiber</jdbc-url>
+    </data-source>
   </component>
 </project>

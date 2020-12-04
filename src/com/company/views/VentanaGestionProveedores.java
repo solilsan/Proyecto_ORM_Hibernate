@@ -21,16 +21,14 @@ public class VentanaGestionProveedores extends JFrame{
     private JPanel panel1;
     private List <ProveedoresEntity> listaProveedores;
     private int regActual;
-    private JButton jbAlta;
-    private JButton jbBaja;
+    private final JButton jbAlta;
+    private final JButton jbBaja;
 
     public VentanaGestionProveedores() {
 
         add(panel1);
 
-        setTitle("Gestión de Proveedores");
         setResizable(false);
-        setSize(600, 400);
 
         // título de la ventana
         setTitle("Gestión de Proveedores");
@@ -83,6 +81,7 @@ public class VentanaGestionProveedores extends JFrame{
         JTextField jtNombre = new JTextField();
         jtNombre.setBounds(180, 100, 200, 20);
         panel1.add(jtNombre);
+        jtNombre.setDocument(new JTextFieldConfig(20, false));
 
         // Apellidos proveedor
         JLabel jlApellidos = new JLabel("Apellidos:");
@@ -91,14 +90,16 @@ public class VentanaGestionProveedores extends JFrame{
         JTextField jtApellidos = new JTextField();
         jtApellidos.setBounds(180, 140, 240, 20);
         panel1.add(jtApellidos);
+        jtApellidos.setDocument(new JTextFieldConfig(30, false));
 
         // Direccion proveedor
         JLabel jlDir = new JLabel("Dirección:");
         jlDir.setBounds(90, 180, 200, 20);
         panel1.add(jlDir);
         JTextField jtDir = new JTextField();
-        jtDir.setBounds(180, 180, 280, 20);
+        jtDir.setBounds(180, 180, 300, 20);
         panel1.add(jtDir);
+        jtDir.setDocument(new JTextFieldConfig(40, false));
 
         // Boton limpiar
         JButton jbLimpiar = new JButton("Limpiar");
@@ -617,7 +618,7 @@ public class VentanaGestionProveedores extends JFrame{
                 ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProvVer.getText());
 
                 String msgInputDialog = "¿Seguro que deseas dar de baja el proveedor con código: " + jtCodProvVer.getText() + "?";
-                int input = JOptionPane.showConfirmDialog(null, msgInputDialog, "Eliminar", JOptionPane.YES_NO_OPTION);
+                int input = JOptionPane.showConfirmDialog(null, msgInputDialog, "Baja", JOptionPane.YES_NO_OPTION);
 
                 if (input == 0) {
                     prov.setEstado("BAJA");
@@ -628,6 +629,47 @@ public class VentanaGestionProveedores extends JFrame{
                     consultaListaProveedores();
                     jbBaja.setEnabled(false);
                     jbAlta.setEnabled(true);
+                }
+
+                session.close();
+                sessionFactory.close();
+
+            } catch (PersistenceException pe) {
+                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        // Ejecución del boton alta
+        jbAlta.addActionListener(e -> {
+
+            try {
+
+                SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
+                        new StandardServiceRegistryBuilder().configure().build());
+
+                Session session = sessionFactory.openSession();
+
+                Transaction tx = session.beginTransaction();
+
+                ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProvVer.getText());
+
+                String msgInputDialog = "¿Seguro que deseas dar de alta el proveedor con código: " + jtCodProvVer.getText() + "?";
+                int input = JOptionPane.showConfirmDialog(null, msgInputDialog, "Alta", JOptionPane.YES_NO_OPTION);
+
+                if (input == 0) {
+                    prov.setEstado("ALTA");
+
+                    session.update(prov);
+                    tx.commit();
+
+                    consultaListaProveedores();
+                    jbBaja.setEnabled(true);
+                    jbAlta.setEnabled(false);
                 }
 
                 session.close();

@@ -1,12 +1,9 @@
 package com.company;
 
-import com.company.hibernateClass.PiezasEntity;
 import com.company.views.VentanaPrincipal;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+
+import javax.swing.*;
 
 public class Main {
 
@@ -14,29 +11,16 @@ public class Main {
 
     public static void main(String[] args) {
 
-        /*
-        SessionFactory sessionFactory = cfg.buildSessionFactory(
-                new StandardServiceRegistryBuilder().configure().build() );
+        try {
 
-        Session session = sessionFactory.openSession();
+            VentanaPrincipal vn = new VentanaPrincipal();
+            vn.setLocationRelativeTo(null);
+            vn.setVisible(true);
 
-        try{
-            PiezasEntity p = session.load(PiezasEntity.class, 10);
-            System.out.printf("Nombre Dep: %s%n", p.getNombre());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
-
-        catch (ObjectNotFoundException o) {
-            System.out.println("No existe la persona!");
-        }
-
-        finally {
-            session.close();
-        }
-         */
-
-        VentanaPrincipal vn = new VentanaPrincipal();
-        vn.setLocationRelativeTo(null);
-        vn.setVisible(true);
 
     }
 }

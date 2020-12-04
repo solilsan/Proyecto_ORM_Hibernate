@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "GESTIONES", schema = "sql7378678")
+@Table(name = "GESTIONES", schema = "proyecthiber")
 public class GestionesEntity {
     private int codigo;
-    private int codproveedor;
-    private int codproyecto;
+    private String codproveedor;
+    private String codproyecto;
 
     @Id
     @Column(name = "CODIGO", nullable = false)
@@ -21,22 +21,22 @@ public class GestionesEntity {
     }
 
     @Basic
-    @Column(name = "CODPROVEEDOR", nullable = false)
-    public int getCodproveedor() {
+    @Column(name = "CODPROVEEDOR", nullable = false, length = 6)
+    public String getCodproveedor() {
         return codproveedor;
     }
 
-    public void setCodproveedor(int codproveedor) {
+    public void setCodproveedor(String codproveedor) {
         this.codproveedor = codproveedor;
     }
 
     @Basic
-    @Column(name = "CODPROYECTO", nullable = false)
-    public int getCodproyecto() {
+    @Column(name = "CODPROYECTO", nullable = false, length = 6)
+    public String getCodproyecto() {
         return codproyecto;
     }
 
-    public void setCodproyecto(int codproyecto) {
+    public void setCodproyecto(String codproyecto) {
         this.codproyecto = codproyecto;
     }
 
@@ -46,8 +46,8 @@ public class GestionesEntity {
         if (o == null || getClass() != o.getClass()) return false;
         GestionesEntity that = (GestionesEntity) o;
         return codigo == that.codigo &&
-                codproveedor == that.codproveedor &&
-                codproyecto == that.codproyecto;
+                Objects.equals(codproveedor, that.codproveedor) &&
+                Objects.equals(codproyecto, that.codproyecto);
     }
 
     @Override

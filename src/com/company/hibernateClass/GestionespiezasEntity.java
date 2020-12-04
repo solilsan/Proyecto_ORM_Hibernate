@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "PIEZASGESTIONES", schema = "sql7378678")
-public class PiezasgestionesEntity {
+@Table(name = "GESTIONESPIEZAS", schema = "proyecthiber")
+public class GestionespiezasEntity {
     private int codigo;
-    private int codpieza;
+    private String codpieza;
     private int codgestion;
 
     @Id
@@ -21,12 +21,12 @@ public class PiezasgestionesEntity {
     }
 
     @Basic
-    @Column(name = "CODPIEZA", nullable = false)
-    public int getCodpieza() {
+    @Column(name = "CODPIEZA", nullable = false, length = 6)
+    public String getCodpieza() {
         return codpieza;
     }
 
-    public void setCodpieza(int codpieza) {
+    public void setCodpieza(String codpieza) {
         this.codpieza = codpieza;
     }
 
@@ -44,10 +44,10 @@ public class PiezasgestionesEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PiezasgestionesEntity that = (PiezasgestionesEntity) o;
+        GestionespiezasEntity that = (GestionespiezasEntity) o;
         return codigo == that.codigo &&
-                codpieza == that.codpieza &&
-                codgestion == that.codgestion;
+                codgestion == that.codgestion &&
+                Objects.equals(codpieza, that.codpieza);
     }
 
     @Override

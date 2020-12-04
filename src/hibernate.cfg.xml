@@ -4,23 +4,24 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:mysql://sql7.freemysqlhosting.net:3306/sql7378678</property>
+    <property name="connection.url">jdbc:mysql://www.db4free.net:3306/proyecthiber</property>
     <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="dialect">
       org.hibernate.dialect.H2Dialect
     </property>
-    <property name="connection.username">sql7378678</property>
-    <property name="connection.password">HKnRwfaSz3</property>
-    <mapping resource="hibernateXmls/GestionesEntityhbm.xml"/>
+    <property name="connection.username">solilhiber</property>
+    <property name="connection.password">Mmo12345</property>
+
     <mapping class="com.company.hibernateClass.GestionesEntity"/>
+    <mapping resource="hibernateXmls/GestionesEntityhbm.xml"/>
+    <mapping resource="hibernateXmls/GestionespiezasEntityhbm.xml"/>
+    <mapping class="com.company.hibernateClass.GestionespiezasEntity"/>
     <mapping resource="hibernateXmls/PiezasEntityhbm.xml"/>
     <mapping class="com.company.hibernateClass.PiezasEntity"/>
-    <mapping class="com.company.hibernateClass.PiezasgestionesEntity"/>
-    <mapping resource="hibernateXmls/PiezasgestionesEntityhbm.xml"/>
-    <mapping resource="hibernateXmls/ProveedoresEntityhbm.xml"/>
     <mapping class="com.company.hibernateClass.ProveedoresEntity"/>
-    <mapping resource="hibernateXmls/ProyectosEntityhbm.xml"/>
+    <mapping resource="hibernateXmls/ProveedoresEntityhbm.xml"/>
     <mapping class="com.company.hibernateClass.ProyectosEntity"/>
+    <mapping resource="hibernateXmls/ProyectosEntityhbm.xml"/>
 
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->

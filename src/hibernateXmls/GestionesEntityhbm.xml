@@ -4,15 +4,15 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="com.company.hibernateClass.GestionesEntity" table="GESTIONES" schema="sql7378678">
+    <class name="com.company.hibernateClass.GestionesEntity" table="GESTIONES" schema="proyecthiber">
         <id name="codigo">
-            <column name="CODIGO" sql-type="int(11)"/>
+            <column name="CODIGO" sql-type="int"/>
         </id>
         <property name="codproveedor">
-            <column name="CODPROVEEDOR" sql-type="int(11)"/>
+            <column name="CODPROVEEDOR" sql-type="varchar(6)" length="6"/>
         </property>
         <property name="codproyecto">
-            <column name="CODPROYECTO" sql-type="int(11)"/>
+            <column name="CODPROYECTO" sql-type="varchar(6)" length="6"/>
         </property>
     </class>
 </hibernate-mapping>

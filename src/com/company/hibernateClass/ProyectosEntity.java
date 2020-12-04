@@ -4,24 +4,24 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "PROYECTOS", schema = "sql7378678")
+@Table(name = "PROYECTOS", schema = "proyecthiber")
 public class ProyectosEntity {
-    private int codigo;
+    private String codigo;
     private String nombre;
     private String ciudad;
 
     @Id
-    @Column(name = "CODIGO", nullable = false)
-    public int getCodigo() {
+    @Column(name = "CODIGO", nullable = false, length = 6)
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
     @Basic
-    @Column(name = "NOMBRE", nullable = false, length = 25)
+    @Column(name = "NOMBRE", nullable = false, length = 40)
     public String getNombre() {
         return nombre;
     }
@@ -31,7 +31,7 @@ public class ProyectosEntity {
     }
 
     @Basic
-    @Column(name = "CIUDAD", nullable = false, length = 25)
+    @Column(name = "CIUDAD", nullable = true, length = 40)
     public String getCiudad() {
         return ciudad;
     }
@@ -45,7 +45,7 @@ public class ProyectosEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProyectosEntity that = (ProyectosEntity) o;
-        return codigo == that.codigo &&
+        return Objects.equals(codigo, that.codigo) &&
                 Objects.equals(nombre, that.nombre) &&
                 Objects.equals(ciudad, that.ciudad);
     }

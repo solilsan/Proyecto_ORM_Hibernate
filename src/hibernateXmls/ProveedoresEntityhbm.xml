@@ -4,18 +4,21 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="com.company.hibernateClass.ProveedoresEntity" table="PROVEEDORES" schema="sql7378678">
+    <class name="com.company.hibernateClass.ProveedoresEntity" table="PROVEEDORES" schema="proyecthiber">
         <id name="codigo">
-            <column name="CODIGO" sql-type="int(11)"/>
+            <column name="CODIGO" sql-type="varchar(6)" length="6"/>
         </id>
         <property name="nombre">
-            <column name="NOMBRE" sql-type="varchar(25)" length="25"/>
+            <column name="NOMBRE" sql-type="varchar(20)" length="20"/>
         </property>
         <property name="apellidos">
-            <column name="APELLIDOS" sql-type="varchar(50)" length="50"/>
+            <column name="APELLIDOS" sql-type="varchar(30)" length="30"/>
         </property>
         <property name="direccion">
-            <column name="DIRECCION" sql-type="varchar(50)" length="50"/>
+            <column name="DIRECCION" sql-type="varchar(40)" length="40"/>
+        </property>
+        <property name="estado">
+            <column name="ESTADO" sql-type="varchar(4)" length="4"/>
         </property>
     </class>
 </hibernate-mapping>

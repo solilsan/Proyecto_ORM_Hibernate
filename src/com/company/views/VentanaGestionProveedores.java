@@ -1,23 +1,26 @@
 package com.company.views;
 
 import com.company.Main;
-import com.company.UpperCaseDocFilter;
 import com.company.hibernateClass.ProveedoresEntity;
+import com.company.swingConfig.JTextFieldConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.TransientPropertyValueException;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.query.Query;
 
+import javax.persistence.PersistenceException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.DocumentFilter;
-import java.awt.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.util.Iterator;
+import java.util.List;
 
 public class VentanaGestionProveedores extends JFrame{
     private JPanel panel1;
+    private List <ProveedoresEntity> listaProveedores;
+    private int regActual;
 
     public VentanaGestionProveedores() {
 
@@ -62,8 +65,6 @@ public class VentanaGestionProveedores extends JFrame{
         jlTitulo.setBounds(40, 20, 348, 20);
         panel1.add(jlTitulo);
 
-        DocumentFilter filter = new UpperCaseDocFilter();
-
         // Codigo proveedor
         JLabel jlCodProv = new JLabel("Código del Proveedor:");
         jlCodProv.setBounds(90, 60, 200, 20);
@@ -71,7 +72,7 @@ public class VentanaGestionProveedores extends JFrame{
         JTextField jtCodProv = new JTextField();
         jtCodProv.setBounds(240, 60, 100, 20);
         panel1.add(jtCodProv);
-        ((AbstractDocument) jtCodProv.getDocument()).setDocumentFilter(filter);
+        jtCodProv.setDocument(new JTextFieldConfig(6, true));
 
         // Nombre proveedor
         JLabel jlNombre = new JLabel("Nombre:");
@@ -125,6 +126,9 @@ public class VentanaGestionProveedores extends JFrame{
             jtNombre.setText("");
             jtApellidos.setText("");
             jtDir.setText("");
+
+            jbModify.setEnabled(false);
+            jbDelete.setEnabled(false);
         });
 
         // Ejecución del boton insertar
@@ -132,38 +136,178 @@ public class VentanaGestionProveedores extends JFrame{
 
             try {
 
+                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtApellidos.getText().isEmpty() && !jtDir.getText().isEmpty()) {
+
+                    SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
+                            new StandardServiceRegistryBuilder().configure().build());
+
+                    Session session = sessionFactory.openSession();
+
+                    Transaction tx = session.beginTransaction();
+
+                    ProveedoresEntity prov = new ProveedoresEntity();
+
+                    prov.setCodigo(jtCodProv.getText());
+                    prov.setNombre(jtNombre.getText());
+                    prov.setApellidos(jtApellidos.getText());
+                    prov.setDireccion(jtDir.getText());
+                    prov.setEstado("ALTA");
+
+                    session.save(prov);
+                    tx.commit();
+
+                    session.close();
+                    sessionFactory.close();
+
+                    jbModify.setEnabled(true);
+                    jbDelete.setEnabled(true);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Faltan datos por rellenar", "Información",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            } catch (PersistenceException pe) {
+                JOptionPane.showMessageDialog(null, "Ya existe un proveedor con ese código", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        jbModify.addActionListener(e -> {
+
+            try {
+
+                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtApellidos.getText().isEmpty() && !jtDir.getText().isEmpty()) {
+
+                    SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
+                            new StandardServiceRegistryBuilder().configure().build());
+
+                    Session session = sessionFactory.openSession();
+
+                    Transaction tx = session.beginTransaction();
+
+                    ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProv.getText());
+
+                    prov.setNombre(jtNombre.getText());
+                    prov.setApellidos(jtApellidos.getText());
+                    prov.setDireccion(jtDir.getText());
+
+                    session.update(prov);
+                    tx.commit();
+
+                    session.close();
+                    sessionFactory.close();
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Faltan datos por rellenar", "Información",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            } catch (PersistenceException pe) {
+                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        jbDelete.addActionListener(e -> {
+
+            try {
+
+                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtApellidos.getText().isEmpty() && !jtDir.getText().isEmpty()) {
+
+                    SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
+                            new StandardServiceRegistryBuilder().configure().build());
+
+                    Session session = sessionFactory.openSession();
+
+                    Transaction tx = session.beginTransaction();
+
+                    ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProv.getText());
+
+                    int input = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar este proveedor?", "Eliminar", JOptionPane.YES_NO_OPTION);
+
+                    if (input == 0) {
+                        session.delete(prov);
+                        tx.commit();
+
+                        jtCodProv.setText("");
+                        jtNombre.setText("");
+                        jtApellidos.setText("");
+                        jtDir.setText("");
+
+                        jbModify.setEnabled(false);
+                        jbDelete.setEnabled(false);
+                    }
+
+                    session.close();
+                    sessionFactory.close();
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Faltan datos por rellenar", "Información",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            } catch (PersistenceException pe) {
+                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        // consulta por el codigo del proveedor
+        jtCodProv.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) { }
+            public void removeUpdate(DocumentEvent e) {
+                jtNombre.setText("");
+                jtApellidos.setText("");
+                jtDir.setText("");
+
+                jbModify.setEnabled(false);
+                jbDelete.setEnabled(false);
+            }
+            public void insertUpdate(DocumentEvent e) {
+
                 SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
-                        new StandardServiceRegistryBuilder().configure().build() );
+                        new StandardServiceRegistryBuilder().configure().build());
 
                 Session session = sessionFactory.openSession();
 
-                Transaction tx = session.beginTransaction();
+                String hql = "from ProveedoresEntity p where p.codigo = ?1";
 
-                ProveedoresEntity prov = new ProveedoresEntity();
+                Query cons = session.createQuery (hql);
+                cons.setParameter(1, jtCodProv.getText());
+                Iterator q = cons.iterate();
 
-                prov.setNombre(jtNombre.getText());
-                prov.setApellidos(jtApellidos.getText());
-                prov.setDireccion(jtDir.getText());
+                if (q.hasNext()) {
+                    ProveedoresEntity prov = (ProveedoresEntity) q.next();
+                    jtNombre.setText(prov.getNombre());
+                    jtApellidos.setText(prov.getApellidos());
+                    jtDir.setText(prov.getDireccion());
 
-                session.save(prov);
-                tx.commit();
-                
-                session.close();
-                sessionFactory.close();
+                    jbModify.setEnabled(true);
+                    jbDelete.setEnabled(true);
 
-            } catch (ConstraintViolationException cv) {
-                System.out.println("PROVEEDOR DUPLICADO");
-                System.out.printf("MENSAJE:%s%n", cv.getMessage());
-                System.out.printf("COD ERROR:%d%n", cv.getErrorCode());
-                System.out.printf("ERROR SQL:%s%n", cv.getSQLException().getMessage());
-            } catch (TransientPropertyValueException tp){
-                System.out.println("EL PROVEEDOR NO EXISTE");
-                System.out.printf("MENSAJE:%s%n", tp.getMessage());
-                System.out.printf("Propiedad:%s%n", tp.getPropertyName());
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                } else {
+                    jtNombre.setText("");
+                    jtApellidos.setText("");
+                    jtDir.setText("");
+
+                    jbModify.setEnabled(false);
+                    jbDelete.setEnabled(false);
+                }
+
             }
-
         });
 
 
@@ -273,6 +417,115 @@ public class VentanaGestionProveedores extends JFrame{
         jbBaja.setBounds(390, 250, 60, 40);
         jbBaja.setEnabled(false);
         panel2.add(jbBaja);
+
+        jbEjecuteCon.addActionListener(e -> {
+
+            try {
+
+                jbFistReg.setEnabled(false);
+                jbMesReg.setEnabled(false);
+
+                SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
+                        new StandardServiceRegistryBuilder().configure().build());
+
+                Session session = sessionFactory.openSession();
+
+                Query q = session.createQuery("from ProveedoresEntity ");
+                listaProveedores = q.list();
+
+                if (listaProveedores.size() > 0) {
+
+                    regActual = 0;
+
+                    jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
+                    jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
+                    jtApellidosVer.setText(listaProveedores.get(regActual).getApellidos());
+                    jtDirVer.setText(listaProveedores.get(regActual).getDireccion());
+
+                    jtpag1.setText(String.valueOf(regActual + 1));
+                    jtpag2.setText(String.valueOf(listaProveedores.size()));
+
+                    if (listaProveedores.size() > 1) {
+                        jbSigReg.setEnabled(true);
+                        jbLastReg.setEnabled(true);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "No hay proveedores", "Información",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                session.close();
+                sessionFactory.close();
+
+            } catch (PersistenceException pe) {
+                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        jbSigReg.addActionListener(e -> {
+
+            try {
+
+                if (listaProveedores.size() > 1 && listaProveedores.size() < listaProveedores.size() + 1) {
+
+                    regActual++;
+
+                    jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
+                    jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
+                    jtApellidosVer.setText(listaProveedores.get(regActual).getApellidos());
+                    jtDirVer.setText(listaProveedores.get(regActual).getDireccion());
+
+                    jtpag1.setText(String.valueOf(regActual + 1));
+                    jbFistReg.setEnabled(true);
+                    jbMesReg.setEnabled(true);
+
+                    if ((regActual + 1) == listaProveedores.size()) {
+                        jbSigReg.setEnabled(false);
+                        jbLastReg.setEnabled(false);
+                    }
+
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        jbLastReg.addActionListener(e -> {
+
+            try {
+
+                jbSigReg.setEnabled(false);
+                jbLastReg.setEnabled(false);
+
+                jbFistReg.setEnabled(true);
+                jbMesReg.setEnabled(true);
+
+                if (listaProveedores.size() > 1 && listaProveedores.size() < listaProveedores.size() + 1) {
+
+                    jtCodProvVer.setText(listaProveedores.get(listaProveedores.size() - 1).getCodigo());
+                    jtNombreVer.setText(listaProveedores.get(listaProveedores.size() - 1).getNombre());
+                    jtApellidosVer.setText(listaProveedores.get(listaProveedores.size() - 1).getApellidos());
+                    jtDirVer.setText(listaProveedores.get(listaProveedores.size() - 1).getDireccion());
+
+                    jtpag1.setText(String.valueOf(listaProveedores.size()));
+
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
 
     }
 

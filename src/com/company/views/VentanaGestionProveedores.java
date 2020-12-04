@@ -21,6 +21,8 @@ public class VentanaGestionProveedores extends JFrame{
     private JPanel panel1;
     private List <ProveedoresEntity> listaProveedores;
     private int regActual;
+    private JButton jbAlta;
+    private JButton jbBaja;
 
     public VentanaGestionProveedores() {
 
@@ -177,6 +179,7 @@ public class VentanaGestionProveedores extends JFrame{
 
         });
 
+        // Ejecución del boton modificar
         jbModify.addActionListener(e -> {
 
             try {
@@ -217,6 +220,7 @@ public class VentanaGestionProveedores extends JFrame{
 
         });
 
+        // Ejecución del boton borrar
         jbDelete.addActionListener(e -> {
 
             try {
@@ -232,7 +236,8 @@ public class VentanaGestionProveedores extends JFrame{
 
                     ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProv.getText());
 
-                    int input = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas eliminar este proveedor?", "Eliminar", JOptionPane.YES_NO_OPTION);
+                    String msgInputDialog = "¿Seguro que deseas eliminar el proveedor con código: " + jtCodProv.getText() + "?";
+                    int input = JOptionPane.showConfirmDialog(null, msgInputDialog, "Eliminar", JOptionPane.YES_NO_OPTION);
 
                     if (input == 0) {
                         session.delete(prov);
@@ -269,10 +274,6 @@ public class VentanaGestionProveedores extends JFrame{
         jtCodProv.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) { }
             public void removeUpdate(DocumentEvent e) {
-                jtNombre.setText("");
-                jtApellidos.setText("");
-                jtDir.setText("");
-
                 jbModify.setEnabled(false);
                 jbDelete.setEnabled(false);
             }
@@ -299,10 +300,6 @@ public class VentanaGestionProveedores extends JFrame{
                     jbDelete.setEnabled(true);
 
                 } else {
-                    jtNombre.setText("");
-                    jtApellidos.setText("");
-                    jtDir.setText("");
-
                     jbModify.setEnabled(false);
                     jbDelete.setEnabled(false);
                 }
@@ -317,8 +314,8 @@ public class VentanaGestionProveedores extends JFrame{
         panel2.setLayout(null);
 
         // otra etiqueta ésta vez en el segundo panel
-        JLabel lbl2 = new JLabel("LISTA DE PROVEEDORES - UTILIZA LOS BOTONES PARA IR DE UN REG A OTRO");
-        lbl2.setBounds(20, 20, 450, 14);
+        JLabel lbl2 = new JLabel("LISTA DE PROVEEDORES - UTILIZA LOS BOTONES PARA IR DE UN REGISTRO A OTRO");
+        lbl2.setBounds(20, 20, 480, 14);
         panel2.add(lbl2);
 
         // Codigo proveedor
@@ -409,15 +406,22 @@ public class VentanaGestionProveedores extends JFrame{
 
         // Boton ejecutar consulta
         JButton jbEjecuteCon = new JButton("Ejecutar Consulta");
-        jbEjecuteCon.setBounds(100, 250, 280, 40);
+        jbEjecuteCon.setBounds(65, 250, 280, 40);
         panel2.add(jbEjecuteCon);
 
         // Boton baja
-        JButton jbBaja = new JButton("Baja");
-        jbBaja.setBounds(390, 250, 60, 40);
+        jbBaja = new JButton("Baja");
+        jbBaja.setBounds(355, 250, 60, 40);
         jbBaja.setEnabled(false);
         panel2.add(jbBaja);
 
+        // Boton alta
+        jbAlta = new JButton("Alta");
+        jbAlta.setBounds(425, 250, 60, 40);
+        jbAlta.setEnabled(false);
+        panel2.add(jbAlta);
+
+        // Ejecución del boton consulta
         jbEjecuteCon.addActionListener(e -> {
 
             try {
@@ -425,17 +429,13 @@ public class VentanaGestionProveedores extends JFrame{
                 jbFistReg.setEnabled(false);
                 jbMesReg.setEnabled(false);
 
-                SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
-                        new StandardServiceRegistryBuilder().configure().build());
-
-                Session session = sessionFactory.openSession();
-
-                Query q = session.createQuery("from ProveedoresEntity ");
-                listaProveedores = q.list();
+                consultaListaProveedores();
 
                 if (listaProveedores.size() > 0) {
 
                     regActual = 0;
+
+                    comprobarAltaBaja(regActual);
 
                     jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
                     jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
@@ -455,9 +455,6 @@ public class VentanaGestionProveedores extends JFrame{
                             JOptionPane.INFORMATION_MESSAGE);
                 }
 
-                session.close();
-                sessionFactory.close();
-
             } catch (PersistenceException pe) {
                 JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -468,6 +465,7 @@ public class VentanaGestionProveedores extends JFrame{
 
         });
 
+        // Ejecución del boton siguiente registro
         jbSigReg.addActionListener(e -> {
 
             try {
@@ -475,6 +473,8 @@ public class VentanaGestionProveedores extends JFrame{
                 if (listaProveedores.size() > 1 && listaProveedores.size() < listaProveedores.size() + 1) {
 
                     regActual++;
+
+                    comprobarAltaBaja(regActual);
 
                     jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
                     jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
@@ -499,6 +499,7 @@ public class VentanaGestionProveedores extends JFrame{
 
         });
 
+        // Ejecución del boton ultimo registro
         jbLastReg.addActionListener(e -> {
 
             try {
@@ -510,6 +511,10 @@ public class VentanaGestionProveedores extends JFrame{
                 jbMesReg.setEnabled(true);
 
                 if (listaProveedores.size() > 1 && listaProveedores.size() < listaProveedores.size() + 1) {
+
+                    regActual = listaProveedores.size() - 1;
+
+                    comprobarAltaBaja(regActual);
 
                     jtCodProvVer.setText(listaProveedores.get(listaProveedores.size() - 1).getCodigo());
                     jtNombreVer.setText(listaProveedores.get(listaProveedores.size() - 1).getNombre());
@@ -526,6 +531,144 @@ public class VentanaGestionProveedores extends JFrame{
             }
 
         });
+
+        // Ejecución del boton registro anterior
+        jbMesReg.addActionListener(e -> {
+
+            try {
+
+                if (regActual > 0) {
+
+                    regActual--;
+
+                    comprobarAltaBaja(regActual);
+
+                    jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
+                    jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
+                    jtApellidosVer.setText(listaProveedores.get(regActual).getApellidos());
+                    jtDirVer.setText(listaProveedores.get(regActual).getDireccion());
+
+                    jtpag1.setText(String.valueOf(regActual + 1));
+
+                    jbSigReg.setEnabled(true);
+                    jbLastReg.setEnabled(true);
+
+                    if (regActual == 0) {
+                        jbMesReg.setEnabled(false);
+                        jbFistReg.setEnabled(false);
+                    }
+
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        // Ejecución del boton primer registro
+        jbFistReg.addActionListener(e -> {
+
+            try {
+
+                if (regActual >= 0) {
+
+                    regActual = 0;
+
+                    comprobarAltaBaja(regActual);
+
+                    jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
+                    jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
+                    jtApellidosVer.setText(listaProveedores.get(regActual).getApellidos());
+                    jtDirVer.setText(listaProveedores.get(regActual).getDireccion());
+
+                    jtpag1.setText(String.valueOf(regActual + 1));
+
+                    jbSigReg.setEnabled(true);
+                    jbLastReg.setEnabled(true);
+
+                    if (regActual == 0) {
+                        jbMesReg.setEnabled(false);
+                        jbFistReg.setEnabled(false);
+                    }
+
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        // Ejecución del boton baja
+        jbBaja.addActionListener(e -> {
+
+            try {
+
+                SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
+                        new StandardServiceRegistryBuilder().configure().build());
+
+                Session session = sessionFactory.openSession();
+
+                Transaction tx = session.beginTransaction();
+
+                ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProvVer.getText());
+
+                String msgInputDialog = "¿Seguro que deseas dar de baja el proveedor con código: " + jtCodProvVer.getText() + "?";
+                int input = JOptionPane.showConfirmDialog(null, msgInputDialog, "Eliminar", JOptionPane.YES_NO_OPTION);
+
+                if (input == 0) {
+                    prov.setEstado("BAJA");
+
+                    session.update(prov);
+                    tx.commit();
+
+                    consultaListaProveedores();
+                    jbBaja.setEnabled(false);
+                    jbAlta.setEnabled(true);
+                }
+
+                session.close();
+                sessionFactory.close();
+
+            } catch (PersistenceException pe) {
+                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+    }
+
+    private void comprobarAltaBaja(int reg) {
+
+        if (listaProveedores.get(reg).getEstado().equalsIgnoreCase("ALTA")) {
+            jbAlta.setEnabled(false);
+            jbBaja.setEnabled(true);
+        } else {
+            jbBaja.setEnabled(false);
+            jbAlta.setEnabled(true);
+        }
+
+    }
+
+    private void consultaListaProveedores() {
+
+        SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
+                new StandardServiceRegistryBuilder().configure().build());
+
+        Session session = sessionFactory.openSession();
+
+        Query q = session.createQuery("from ProveedoresEntity ");
+        listaProveedores = q.list();
+
+        session.close();
+        sessionFactory.close();
 
     }
 

@@ -457,7 +457,14 @@ public class VentanaGestionProveedores extends JFrame{
                 }
 
             } catch (PersistenceException pe) {
-                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
+                String msgError;
+                if (pe.getCause().toString().equalsIgnoreCase("org.hibernate.exception.JDBCConnectionException: Error calling Driver#connect")) {
+                    msgError = "Error con la conexión";
+                }
+                else {
+                    msgError = "No existen proveedores";
+                }
+                JOptionPane.showMessageDialog(null, msgError, "Error",
                         JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",

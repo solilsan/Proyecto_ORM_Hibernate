@@ -9,6 +9,7 @@ public class GestionespiezasEntity {
     private int codigo;
     private String codpieza;
     private int codgestion;
+    private double cantidad;
 
     @Id
     @Column(name = "CODIGO", nullable = false)
@@ -38,6 +39,16 @@ public class GestionespiezasEntity {
 
     public void setCodgestion(int codgestion) {
         this.codgestion = codgestion;
+    }
+
+    @Basic
+    @Column(name = "CANTIDAD", nullable = false)
+    public double getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(double cantidad) {
+        this.cantidad = cantidad;
     }
 
     @Override

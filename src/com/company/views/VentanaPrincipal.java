@@ -45,7 +45,8 @@ public class VentanaPrincipal extends JFrame {
         baseDatosMenu.add(baseDatosMenuItem);
         menuBar.add(baseDatosMenu);
 
-        var proveedoresMenu = new JMenu("Base de Datos");
+        // Menñu proveedores
+        var proveedoresMenu = new JMenu("Proveedores");
         menuBar.add(proveedoresMenu);
 
         var proveedoresGestionItem = new JMenuItem("Gestión de Proveedores");
@@ -88,6 +89,131 @@ public class VentanaPrincipal extends JFrame {
         proveedoresConsultaMenu.add(proveedoresConsultaMenuPorCodigo);
         proveedoresConsultaMenu.add(proveedoresConsultaMenuPorNombre);
         proveedoresConsultaMenu.add(proveedoresConsultaMenuPorDireccion);
+
+        // Menú piezas
+        var piezasMenu = new JMenu("Piezas");
+        menuBar.add(piezasMenu);
+
+        var piezasGestionItem = new JMenuItem("Gestión de Piezas");
+        piezasGestionItem.addActionListener(
+                (event) -> {
+                    VentanaGestionPiezas vgp = new VentanaGestionPiezas();
+                    vgp.setLocationRelativeTo(null);
+                    vgp.setVisible(true);
+                }
+        );
+
+        var piezasConsultaMenu = new JMenu("Consulta de Piezas");
+        var piezasConsultaMenuPorCodigo = new JMenuItem("Por Código");
+        piezasConsultaMenuPorCodigo.addActionListener(
+                (event) -> {
+                    VentanaConsultaPiezas vcp = new VentanaConsultaPiezas("Consulta de Piezas por Código", 0);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
+        var piezasConsultaMenuPorNombre = new JMenuItem("Por Nombre");
+        piezasConsultaMenuPorNombre.addActionListener(
+                (event) -> {
+                    VentanaConsultaPiezas vcp = new VentanaConsultaPiezas("Consulta de Piezas por Nombre", 1);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
+        var piezasConsultaMenuPorDescript = new JMenuItem("Por Descripción");
+        piezasConsultaMenuPorDescript.addActionListener(
+                (event) -> {
+                    VentanaConsultaPiezas vcp = new VentanaConsultaPiezas("Consulta de Piezas por Descripción", 2);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
+
+        piezasMenu.add(piezasGestionItem);
+        piezasMenu.add(piezasConsultaMenu);
+        piezasConsultaMenu.add(piezasConsultaMenuPorCodigo);
+        piezasConsultaMenu.add(piezasConsultaMenuPorNombre);
+        piezasConsultaMenu.add(piezasConsultaMenuPorDescript);
+
+        // Menú proyectos
+        var proyectosMenu = new JMenu("Proyectos");
+        menuBar.add(proyectosMenu);
+
+        var proyectosGestionItem = new JMenuItem("Gestión de Proyectos");
+        proyectosGestionItem.addActionListener(
+                (event) -> {
+                    VentanaGestionProyectos vgp = new VentanaGestionProyectos();
+                    vgp.setLocationRelativeTo(null);
+                    vgp.setVisible(true);
+                }
+        );
+
+        var proyectosConsultaMenu = new JMenu("Consulta de Proyectos");
+        var proyectosConsultaMenuPorCodigo = new JMenuItem("Por Código");
+        proyectosConsultaMenuPorCodigo.addActionListener(
+                (event) -> {
+                    VentanaConsultaProyectos vcp = new VentanaConsultaProyectos("Consulta de Proyectos por Código", 0);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
+        var proyectosConsultaMenuPorNombre = new JMenuItem("Por Nombre");
+        proyectosConsultaMenuPorNombre.addActionListener(
+                (event) -> {
+                    VentanaConsultaProyectos vcp = new VentanaConsultaProyectos("Consulta de Proyectos por Nombre", 1);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
+        var proyectosConsultaMenuPorDescript = new JMenuItem("Por Ciudad");
+        proyectosConsultaMenuPorDescript.addActionListener(
+                (event) -> {
+                    VentanaConsultaProyectos vcp = new VentanaConsultaProyectos("Consulta de Proyectos por Ciudad", 2);
+                    vcp.setLocationRelativeTo(null);
+                    vcp.setVisible(true);
+                }
+        );
+
+        proyectosMenu.add(proyectosGestionItem);
+        proyectosMenu.add(proyectosConsultaMenu);
+        proyectosConsultaMenu.add(proyectosConsultaMenuPorCodigo);
+        proyectosConsultaMenu.add(proyectosConsultaMenuPorNombre);
+        proyectosConsultaMenu.add(proyectosConsultaMenuPorDescript);
+
+        // Menú global
+        var globalMenu = new JMenu("Gestión Global");
+        menuBar.add(globalMenu);
+
+        var globalGestionItem = new JMenuItem("Piezas, Proveedores y Proyectos");
+        globalGestionItem.addActionListener(
+                (event) -> {
+                    VentanaGestionGlobalPPP vgp = new VentanaGestionGlobalPPP();
+                    vgp.setLocationRelativeTo(null);
+                    vgp.setVisible(true);
+                }
+        );
+
+        var suministrosProvGestionItem = new JMenuItem("Suministros por Proveedor");
+        suministrosProvGestionItem.addActionListener(
+                (event) -> {
+                    VentanaSuministrosProveedores vgp = new VentanaSuministrosProveedores();
+                    vgp.setLocationRelativeTo(null);
+                    vgp.setVisible(true);
+                }
+        );
+
+        var suministrosPiezaGestionItem = new JMenuItem("Suministros por Piezas");
+        suministrosPiezaGestionItem.addActionListener(
+                (event) -> {
+                    VentanaSuministrosPiezas vgp = new VentanaSuministrosPiezas();
+                    vgp.setLocationRelativeTo(null);
+                    vgp.setVisible(true);
+                }
+        );
+
+        globalMenu.add(globalGestionItem);
+        globalMenu.add(suministrosProvGestionItem);
+        globalMenu.add(suministrosPiezaGestionItem);
 
         setJMenuBar(menuBar);
     }

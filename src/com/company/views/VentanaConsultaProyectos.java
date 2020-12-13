@@ -2,6 +2,7 @@ package com.company.views;
 
 import com.company.Main;
 import com.company.hibernateClass.ProveedoresEntity;
+import com.company.hibernateClass.ProyectosEntity;
 import com.company.swingConfig.JTextFieldConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,20 +13,19 @@ import javax.persistence.PersistenceException;
 import javax.swing.*;
 import java.util.List;
 
-public class VentanaConsultaProveedores extends JFrame {
+public class VentanaConsultaProyectos extends JFrame {
 
     private JPanel panel1;
-    private List<ProveedoresEntity> listaProveedores;
+    private List<ProyectosEntity> listaProyectos;
 
-    // Tipo 0 = por codigo, 1 = por nombre y 2 = por direccion
-    public VentanaConsultaProveedores(String title, int tipo) {
+    public VentanaConsultaProyectos(String title, int tipo) {
 
         if (tipo == 0) {
             add(porCodigo());
         } else if (tipo == 1) {
             add(porNombre());
         } else if (tipo == 2) {
-            add(porDireccion());
+            add(porCiudad());
         }else {
             add(panel1);
         }
@@ -51,7 +51,7 @@ public class VentanaConsultaProveedores extends JFrame {
         jtCodProv.setDocument(new JTextFieldConfig(6, true));
 
         // Boton buscar
-        JButton jbBuscar = new JButton("Buscar Proveedor");
+        JButton jbBuscar = new JButton("Buscar Proyectos");
         jbBuscar.setBounds(360, 30, 150, 20);
         panel1.add(jbBuscar);
 
@@ -74,17 +74,17 @@ public class VentanaConsultaProveedores extends JFrame {
 
                 Session session = sessionFactory.openSession();
 
-                Query q = session.createQuery("from ProveedoresEntity where codigo like ?1");
+                Query q = session.createQuery("from ProyectosEntity where codigo like ?1");
                 q.setParameter(1, '%' + jtCodProv.getText() + '%');
-                listaProveedores = q.list();
+                listaProyectos = q.list();
 
                 combo.removeAllItems();
 
-                if (listaProveedores.size() == 0) {
-                    JOptionPane.showMessageDialog(null, "No existen proveedores con esos datos.", "Información",
+                if (listaProyectos.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "No existen proyectos con esos datos.", "Información",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    for (ProveedoresEntity listaProv : listaProveedores) {
+                    for (ProyectosEntity listaProv : listaProyectos) {
                         combo.addItem(listaProv.getCodigo());
                     }
                 }
@@ -98,7 +98,7 @@ public class VentanaConsultaProveedores extends JFrame {
                     msgError = "Error con la conexión";
                 }
                 else {
-                    msgError = "No existen proveedores";
+                    msgError = "No existen proyectos";
                 }
                 JOptionPane.showMessageDialog(null, msgError, "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -130,7 +130,7 @@ public class VentanaConsultaProveedores extends JFrame {
         jtNombreProv.setDocument(new JTextFieldConfig(6, false));
 
         // Boton buscar
-        JButton jbBuscar = new JButton("Buscar Proveedor");
+        JButton jbBuscar = new JButton("Buscar Proyectos");
         jbBuscar.setBounds(360, 30, 150, 20);
         panel1.add(jbBuscar);
 
@@ -153,17 +153,17 @@ public class VentanaConsultaProveedores extends JFrame {
 
                 Session session = sessionFactory.openSession();
 
-                Query q = session.createQuery("from ProveedoresEntity where nombre like ?1");
+                Query q = session.createQuery("from ProyectosEntity where nombre like ?1");
                 q.setParameter(1, '%' + jtNombreProv.getText() + '%');
-                listaProveedores = q.list();
+                listaProyectos = q.list();
 
                 combo.removeAllItems();
 
-                if (listaProveedores.size() == 0) {
-                    JOptionPane.showMessageDialog(null, "No existen proveedores con esos datos.", "Información",
+                if (listaProyectos.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "No existen proyectos con esos datos.", "Información",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    for (ProveedoresEntity listaProv : listaProveedores) {
+                    for (ProyectosEntity listaProv : listaProyectos) {
                         combo.addItem(listaProv.getCodigo());
                     }
                 }
@@ -177,7 +177,7 @@ public class VentanaConsultaProveedores extends JFrame {
                     msgError = "Error con la conexión";
                 }
                 else {
-                    msgError = "No existen proveedores";
+                    msgError = "No existen proyectos";
                 }
                 JOptionPane.showMessageDialog(null, msgError, "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -194,13 +194,13 @@ public class VentanaConsultaProveedores extends JFrame {
 
     }
 
-    private JPanel porDireccion() {
+    private JPanel porCiudad() {
 
         JPanel panel1 = new JPanel();
         panel1.setLayout(null);
 
         // Codigo proveedor
-        JLabel jlDirProv = new JLabel("Escribe la dirección o parte del ella:");
+        JLabel jlDirProv = new JLabel("Escribe la ciudad o parte del ella:");
         jlDirProv.setBounds(30, 30, 250, 20);
         panel1.add(jlDirProv);
         JTextField jtDirProv = new JTextField();
@@ -209,7 +209,7 @@ public class VentanaConsultaProveedores extends JFrame {
         jtDirProv.setDocument(new JTextFieldConfig(6, false));
 
         // Boton buscar
-        JButton jbBuscar = new JButton("Buscar Proveedor");
+        JButton jbBuscar = new JButton("Buscar Proyectos");
         jbBuscar.setBounds(360, 30, 150, 20);
         panel1.add(jbBuscar);
 
@@ -232,17 +232,17 @@ public class VentanaConsultaProveedores extends JFrame {
 
                 Session session = sessionFactory.openSession();
 
-                Query q = session.createQuery("from ProveedoresEntity where direccion like ?1");
+                Query q = session.createQuery("from ProyectosEntity where ciudad like ?1");
                 q.setParameter(1, '%' + jtDirProv.getText() + '%');
-                listaProveedores = q.list();
+                listaProyectos = q.list();
 
                 combo.removeAllItems();
 
-                if (listaProveedores.size() == 0) {
-                    JOptionPane.showMessageDialog(null, "No existen proveedores con esos datos.", "Información",
+                if (listaProyectos.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "No existen proyectos con esos datos.", "Información",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    for (ProveedoresEntity listaProv : listaProveedores) {
+                    for (ProyectosEntity listaProv : listaProyectos) {
                         combo.addItem(listaProv.getCodigo());
                     }
                 }
@@ -256,7 +256,7 @@ public class VentanaConsultaProveedores extends JFrame {
                     msgError = "Error con la conexión";
                 }
                 else {
-                    msgError = "No existen proveedores";
+                    msgError = "No existen proyectos";
                 }
                 JOptionPane.showMessageDialog(null, msgError, "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -278,11 +278,10 @@ public class VentanaConsultaProveedores extends JFrame {
         try {
 
             display.setText("");
-            ProveedoresEntity prov = listaProveedores.get(combo.getSelectedIndex());
+            ProyectosEntity prov = listaProyectos.get(combo.getSelectedIndex());
             String texto = "\n     CÓDIGO :     " + prov.getCodigo() + "";
             texto += "\n\n\n     NOMBRE :     " + prov.getNombre() + "";
-            texto += "\n\n\n     APELLIDOS :     " + prov.getApellidos() + "";
-            texto += "\n\n\n     DIRECCIÓN :     " + prov.getDireccion() + "";
+                texto += "\n\n\n     CIUDAD :     " + prov.getCiudad() + "";
             display.setText(texto);
 
         } catch (Exception ex) {

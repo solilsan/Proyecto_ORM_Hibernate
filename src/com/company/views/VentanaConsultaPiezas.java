@@ -1,7 +1,7 @@
 package com.company.views;
 
 import com.company.Main;
-import com.company.hibernateClass.ProveedoresEntity;
+import com.company.hibernateClass.PiezasEntity;
 import com.company.swingConfig.JTextFieldConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,22 +10,23 @@ import org.hibernate.query.Query;
 
 import javax.persistence.PersistenceException;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.util.List;
 
-public class VentanaConsultaProveedores extends JFrame {
+public class VentanaConsultaPiezas extends JFrame {
 
     private JPanel panel1;
-    private List<ProveedoresEntity> listaProveedores;
+    private List<PiezasEntity> listaPiezas;
 
-    // Tipo 0 = por codigo, 1 = por nombre y 2 = por direccion
-    public VentanaConsultaProveedores(String title, int tipo) {
+    public VentanaConsultaPiezas(String title, int tipo) {
 
         if (tipo == 0) {
             add(porCodigo());
         } else if (tipo == 1) {
             add(porNombre());
         } else if (tipo == 2) {
-            add(porDireccion());
+            add(porDescripcion());
         }else {
             add(panel1);
         }
@@ -41,17 +42,17 @@ public class VentanaConsultaProveedores extends JFrame {
         JPanel panel1 = new JPanel();
         panel1.setLayout(null);
 
-        // Codigo proveedor
-        JLabel jlCodProv = new JLabel("Escribe el código o parte del el:");
-        jlCodProv.setBounds(30, 30, 250, 20);
-        panel1.add(jlCodProv);
-        JTextField jtCodProv = new JTextField();
-        jtCodProv.setBounds(250, 30, 100, 20);
-        panel1.add(jtCodProv);
-        jtCodProv.setDocument(new JTextFieldConfig(6, true));
+        // Codigo pieza
+        JLabel jlCodPieza = new JLabel("Escribe el código o parte del el:");
+        jlCodPieza.setBounds(30, 30, 250, 20);
+        panel1.add(jlCodPieza);
+        JTextField jtCodPieza = new JTextField();
+        jtCodPieza.setBounds(250, 30, 100, 20);
+        panel1.add(jtCodPieza);
+        jtCodPieza.setDocument(new JTextFieldConfig(6, true));
 
         // Boton buscar
-        JButton jbBuscar = new JButton("Buscar Proveedor");
+        JButton jbBuscar = new JButton("Buscar Piezas");
         jbBuscar.setBounds(360, 30, 150, 20);
         panel1.add(jbBuscar);
 
@@ -61,7 +62,8 @@ public class VentanaConsultaProveedores extends JFrame {
         panel1.add(combo);
 
         JTextArea display = new JTextArea();
-        display.setBounds(90, 100, 400, 200);
+        display.setBounds(80, 100, 420, 240);
+        display.setLineWrap(true);
         display.setEditable(false);
         panel1.add(display);
 
@@ -74,18 +76,18 @@ public class VentanaConsultaProveedores extends JFrame {
 
                 Session session = sessionFactory.openSession();
 
-                Query q = session.createQuery("from ProveedoresEntity where codigo like ?1");
-                q.setParameter(1, '%' + jtCodProv.getText() + '%');
-                listaProveedores = q.list();
+                Query q = session.createQuery("from PiezasEntity where codigo like ?1");
+                q.setParameter(1, '%' + jtCodPieza.getText() + '%');
+                listaPiezas = q.list();
 
                 combo.removeAllItems();
 
-                if (listaProveedores.size() == 0) {
-                    JOptionPane.showMessageDialog(null, "No existen proveedores con esos datos.", "Información",
+                if (listaPiezas.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "No existen piezas con esos datos.", "Información",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    for (ProveedoresEntity listaProv : listaProveedores) {
-                        combo.addItem(listaProv.getCodigo());
+                    for (PiezasEntity listaPieza : listaPiezas) {
+                        combo.addItem(listaPieza.getCodigo());
                     }
                 }
 
@@ -98,7 +100,7 @@ public class VentanaConsultaProveedores extends JFrame {
                     msgError = "Error con la conexión";
                 }
                 else {
-                    msgError = "No existen proveedores";
+                    msgError = "No existen piezas";
                 }
                 JOptionPane.showMessageDialog(null, msgError, "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -120,17 +122,17 @@ public class VentanaConsultaProveedores extends JFrame {
         JPanel panel1 = new JPanel();
         panel1.setLayout(null);
 
-        // Codigo proveedor
-        JLabel jlNombreProv = new JLabel("Escribe el nombre o parte del el:");
-        jlNombreProv.setBounds(30, 30, 250, 20);
-        panel1.add(jlNombreProv);
-        JTextField jtNombreProv = new JTextField();
-        jtNombreProv.setBounds(250, 30, 100, 20);
-        panel1.add(jtNombreProv);
-        jtNombreProv.setDocument(new JTextFieldConfig(6, false));
+        // Nombre pieza
+        JLabel jlNombrePieza = new JLabel("Escribe el nombre o parte del el:");
+        jlNombrePieza.setBounds(30, 30, 250, 20);
+        panel1.add(jlNombrePieza);
+        JTextField jtNombrePieza = new JTextField();
+        jtNombrePieza.setBounds(250, 30, 100, 20);
+        panel1.add(jtNombrePieza);
+        jtNombrePieza.setDocument(new JTextFieldConfig(6, false));
 
         // Boton buscar
-        JButton jbBuscar = new JButton("Buscar Proveedor");
+        JButton jbBuscar = new JButton("Buscar Piezas");
         jbBuscar.setBounds(360, 30, 150, 20);
         panel1.add(jbBuscar);
 
@@ -140,7 +142,8 @@ public class VentanaConsultaProveedores extends JFrame {
         panel1.add(combo);
 
         JTextArea display = new JTextArea();
-        display.setBounds(90, 100, 400, 200);
+        display.setBounds(80, 100, 420, 240);
+        display.setLineWrap(true);
         display.setEditable(false);
         panel1.add(display);
 
@@ -153,18 +156,18 @@ public class VentanaConsultaProveedores extends JFrame {
 
                 Session session = sessionFactory.openSession();
 
-                Query q = session.createQuery("from ProveedoresEntity where nombre like ?1");
-                q.setParameter(1, '%' + jtNombreProv.getText() + '%');
-                listaProveedores = q.list();
+                Query q = session.createQuery("from PiezasEntity where nombre like ?1");
+                q.setParameter(1, '%' + jtNombrePieza.getText() + '%');
+                listaPiezas = q.list();
 
                 combo.removeAllItems();
 
-                if (listaProveedores.size() == 0) {
-                    JOptionPane.showMessageDialog(null, "No existen proveedores con esos datos.", "Información",
+                if (listaPiezas.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "No existen piezas con esos datos.", "Información",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    for (ProveedoresEntity listaProv : listaProveedores) {
-                        combo.addItem(listaProv.getCodigo());
+                    for (PiezasEntity listaPieza : listaPiezas) {
+                        combo.addItem(listaPieza.getCodigo());
                     }
                 }
 
@@ -177,7 +180,7 @@ public class VentanaConsultaProveedores extends JFrame {
                     msgError = "Error con la conexión";
                 }
                 else {
-                    msgError = "No existen proveedores";
+                    msgError = "No existen piezas";
                 }
                 JOptionPane.showMessageDialog(null, msgError, "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -194,13 +197,13 @@ public class VentanaConsultaProveedores extends JFrame {
 
     }
 
-    private JPanel porDireccion() {
+    private JPanel porDescripcion() {
 
         JPanel panel1 = new JPanel();
         panel1.setLayout(null);
 
         // Codigo proveedor
-        JLabel jlDirProv = new JLabel("Escribe la dirección o parte del ella:");
+        JLabel jlDirProv = new JLabel("Escribe la descripción o parte del ella:");
         jlDirProv.setBounds(30, 30, 250, 20);
         panel1.add(jlDirProv);
         JTextField jtDirProv = new JTextField();
@@ -209,7 +212,7 @@ public class VentanaConsultaProveedores extends JFrame {
         jtDirProv.setDocument(new JTextFieldConfig(6, false));
 
         // Boton buscar
-        JButton jbBuscar = new JButton("Buscar Proveedor");
+        JButton jbBuscar = new JButton("Buscar Piezas");
         jbBuscar.setBounds(360, 30, 150, 20);
         panel1.add(jbBuscar);
 
@@ -219,7 +222,8 @@ public class VentanaConsultaProveedores extends JFrame {
         panel1.add(combo);
 
         JTextArea display = new JTextArea();
-        display.setBounds(90, 100, 400, 200);
+        display.setBounds(80, 100, 420, 240);
+        display.setLineWrap(true);
         display.setEditable(false);
         panel1.add(display);
 
@@ -232,18 +236,18 @@ public class VentanaConsultaProveedores extends JFrame {
 
                 Session session = sessionFactory.openSession();
 
-                Query q = session.createQuery("from ProveedoresEntity where direccion like ?1");
+                Query q = session.createQuery("from PiezasEntity where descripcion like ?1");
                 q.setParameter(1, '%' + jtDirProv.getText() + '%');
-                listaProveedores = q.list();
+                listaPiezas = q.list();
 
                 combo.removeAllItems();
 
-                if (listaProveedores.size() == 0) {
-                    JOptionPane.showMessageDialog(null, "No existen proveedores con esos datos.", "Información",
+                if (listaPiezas.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "No existen piezas con esos datos.", "Información",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    for (ProveedoresEntity listaProv : listaProveedores) {
-                        combo.addItem(listaProv.getCodigo());
+                    for (PiezasEntity listaPieza : listaPiezas) {
+                        combo.addItem(listaPieza.getCodigo());
                     }
                 }
 
@@ -256,7 +260,7 @@ public class VentanaConsultaProveedores extends JFrame {
                     msgError = "Error con la conexión";
                 }
                 else {
-                    msgError = "No existen proveedores";
+                    msgError = "No existen piezas";
                 }
                 JOptionPane.showMessageDialog(null, msgError, "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -278,12 +282,22 @@ public class VentanaConsultaProveedores extends JFrame {
         try {
 
             display.setText("");
-            ProveedoresEntity prov = listaProveedores.get(combo.getSelectedIndex());
-            String texto = "\n     CÓDIGO :     " + prov.getCodigo() + "";
-            texto += "\n\n\n     NOMBRE :     " + prov.getNombre() + "";
-            texto += "\n\n\n     APELLIDOS :     " + prov.getApellidos() + "";
-            texto += "\n\n\n     DIRECCIÓN :     " + prov.getDireccion() + "";
+            display.removeAll();
+            PiezasEntity pieza = listaPiezas.get(combo.getSelectedIndex());
+            String texto = "\n     CÓDIGO :     " + pieza.getCodigo() + "";
+            texto += "\n\n\n     NOMBRE :     " + pieza.getNombre() + "";
+            texto += "\n\n\n     PRECIO :     " + pieza.getPrecio() + "";
+            texto += "\n\n\n     DESCRIPCIÓN :     ";
             display.setText(texto);
+
+            JTextArea jtaDes = new JTextArea();
+            jtaDes.setBounds(110, 160, 300, 70);
+            jtaDes.setLineWrap(true);
+            jtaDes.setEditable(false);
+            jtaDes.setText(pieza.getDescripcion());
+            jtaDes.setBorder(new LineBorder(Color.BLACK));
+
+            display.add(jtaDes);
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

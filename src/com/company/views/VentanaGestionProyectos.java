@@ -2,6 +2,7 @@ package com.company.views;
 
 import com.company.Main;
 import com.company.hibernateClass.ProveedoresEntity;
+import com.company.hibernateClass.ProyectosEntity;
 import com.company.swingConfig.JTextFieldConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,22 +18,20 @@ import javax.swing.event.DocumentListener;
 import java.util.Iterator;
 import java.util.List;
 
-public class VentanaGestionProveedores extends JFrame{
+public class VentanaGestionProyectos extends JFrame {
 
     private JPanel panel1;
-    private List <ProveedoresEntity> listaProveedores;
+    private List<ProyectosEntity> listaProyectos;
     private int regActual;
-    private final JButton jbAlta;
-    private final JButton jbBaja;
 
-    public VentanaGestionProveedores() {
+    public VentanaGestionProyectos() {
 
         add(panel1);
 
         setResizable(false);
 
         // título de la ventana
-        setTitle("Gestión de Proveedores");
+        setTitle("Gestión de Proyectos");
         // operación al cerra la ventana
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // coordenadas de las esquinas del frame en el escritorio
@@ -55,7 +54,7 @@ public class VentanaGestionProveedores extends JFrame{
         // éste es el primer panel
         // que se añade como pestaña al 'tabbedPane'
         JPanel panel1 = new JPanel();
-        panelDePestanas.addTab("Gestión de Proveedores", null, panel1, null);
+        panelDePestanas.addTab("Gestión de Proyectos", null, panel1, null);
         // al panel le pongo distribución nula para
         // posicionar los elementos en las coordenadas que
         // quiera
@@ -66,41 +65,32 @@ public class VentanaGestionProveedores extends JFrame{
         jlTitulo.setBounds(40, 20, 348, 20);
         panel1.add(jlTitulo);
 
-        // Codigo proveedor
+        // Codigo proyecto
         JLabel jlCodProv = new JLabel("Código:");
-        jlCodProv.setBounds(90, 60, 200, 20);
+        jlCodProv.setBounds(90, 80, 200, 20);
         panel1.add(jlCodProv);
         JTextField jtCodProv = new JTextField();
-        jtCodProv.setBounds(180, 60, 100, 20);
+        jtCodProv.setBounds(180, 80, 100, 20);
         panel1.add(jtCodProv);
         jtCodProv.setDocument(new JTextFieldConfig(6, true));
 
-        // Nombre proveedor
+        // Nombre proyecto
         JLabel jlNombre = new JLabel("Nombre:");
-        jlNombre.setBounds(90, 100, 200, 20);
+        jlNombre.setBounds(90, 130, 200, 20);
         panel1.add(jlNombre);
         JTextField jtNombre = new JTextField();
-        jtNombre.setBounds(180, 100, 200, 20);
+        jtNombre.setBounds(180, 130, 200, 20);
         panel1.add(jtNombre);
         jtNombre.setDocument(new JTextFieldConfig(20, false));
 
-        // Apellidos proveedor
-        JLabel jlApellidos = new JLabel("Apellidos:");
-        jlApellidos.setBounds(90, 140, 200, 20);
-        panel1.add(jlApellidos);
-        JTextField jtApellidos = new JTextField();
-        jtApellidos.setBounds(180, 140, 240, 20);
-        panel1.add(jtApellidos);
-        jtApellidos.setDocument(new JTextFieldConfig(30, false));
-
-        // Direccion proveedor
-        JLabel jlDir = new JLabel("Dirección:");
-        jlDir.setBounds(90, 180, 200, 20);
-        panel1.add(jlDir);
-        JTextField jtDir = new JTextField();
-        jtDir.setBounds(180, 180, 300, 20);
-        panel1.add(jtDir);
-        jtDir.setDocument(new JTextFieldConfig(40, false));
+        // Ciudad proyecto
+        JLabel jlCiudad = new JLabel("Ciudad:");
+        jlCiudad.setBounds(90, 180, 200, 20);
+        panel1.add(jlCiudad);
+        JTextField jtCiudad = new JTextField();
+        jtCiudad.setBounds(180, 180, 200, 20);
+        panel1.add(jtCiudad);
+        jtCiudad.setDocument(new JTextFieldConfig(30, false));
 
         // Boton limpiar
         JButton jbLimpiar = new JButton("Limpiar");
@@ -128,8 +118,7 @@ public class VentanaGestionProveedores extends JFrame{
         jbLimpiar.addActionListener(e -> {
             jtCodProv.setText("");
             jtNombre.setText("");
-            jtApellidos.setText("");
-            jtDir.setText("");
+            jtCiudad.setText("");
 
             jbModify.setEnabled(false);
             jbDelete.setEnabled(false);
@@ -140,7 +129,7 @@ public class VentanaGestionProveedores extends JFrame{
 
             try {
 
-                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtApellidos.getText().isEmpty() && !jtDir.getText().isEmpty()) {
+                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtCiudad.getText().isEmpty()) {
 
                     SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
                             new StandardServiceRegistryBuilder().configure().build());
@@ -149,13 +138,11 @@ public class VentanaGestionProveedores extends JFrame{
 
                     Transaction tx = session.beginTransaction();
 
-                    ProveedoresEntity prov = new ProveedoresEntity();
+                    ProyectosEntity prov = new ProyectosEntity();
 
                     prov.setCodigo(jtCodProv.getText());
                     prov.setNombre(jtNombre.getText());
-                    prov.setApellidos(jtApellidos.getText());
-                    prov.setDireccion(jtDir.getText());
-                    prov.setEstado("ALTA");
+                    prov.setCiudad(jtCiudad.getText());
 
                     session.save(prov);
                     tx.commit();
@@ -172,7 +159,7 @@ public class VentanaGestionProveedores extends JFrame{
                 }
 
             } catch (PersistenceException pe) {
-                JOptionPane.showMessageDialog(null, "Ya existe un proveedor con ese código", "Error",
+                JOptionPane.showMessageDialog(null, "Ya existe un proyecto con ese código", "Error",
                         JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
@@ -186,7 +173,7 @@ public class VentanaGestionProveedores extends JFrame{
 
             try {
 
-                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtApellidos.getText().isEmpty() && !jtDir.getText().isEmpty()) {
+                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtCiudad.getText().isEmpty()) {
 
                     SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
                             new StandardServiceRegistryBuilder().configure().build());
@@ -195,11 +182,10 @@ public class VentanaGestionProveedores extends JFrame{
 
                     Transaction tx = session.beginTransaction();
 
-                    ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProv.getText());
+                    ProyectosEntity prov = session.load(ProyectosEntity.class, jtCodProv.getText());
 
                     prov.setNombre(jtNombre.getText());
-                    prov.setApellidos(jtApellidos.getText());
-                    prov.setDireccion(jtDir.getText());
+                    prov.setCiudad(jtCiudad.getText());
 
                     session.update(prov);
                     tx.commit();
@@ -213,7 +199,7 @@ public class VentanaGestionProveedores extends JFrame{
                 }
 
             } catch (PersistenceException pe) {
-                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
+                JOptionPane.showMessageDialog(null, "No existe un proyecto con ese código", "Error",
                         JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
@@ -227,7 +213,7 @@ public class VentanaGestionProveedores extends JFrame{
 
             try {
 
-                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtApellidos.getText().isEmpty() && !jtDir.getText().isEmpty()) {
+                if (!jtCodProv.getText().isEmpty() && !jtNombre.getText().isEmpty() && !jtCiudad.getText().isEmpty()) {
 
                     SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
                             new StandardServiceRegistryBuilder().configure().build());
@@ -236,9 +222,9 @@ public class VentanaGestionProveedores extends JFrame{
 
                     Transaction tx = session.beginTransaction();
 
-                    ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProv.getText());
+                    ProyectosEntity prov = session.load(ProyectosEntity.class, jtCodProv.getText());
 
-                    String msgInputDialog = "¿Seguro que deseas eliminar el proveedor con código: " + jtCodProv.getText() + "?";
+                    String msgInputDialog = "¿Seguro que deseas eliminar el proyecto con código: " + jtCodProv.getText() + "?";
                     int input = JOptionPane.showConfirmDialog(null, msgInputDialog, "Eliminar", JOptionPane.YES_NO_OPTION);
 
                     if (input == 0) {
@@ -247,8 +233,7 @@ public class VentanaGestionProveedores extends JFrame{
 
                         jtCodProv.setText("");
                         jtNombre.setText("");
-                        jtApellidos.setText("");
-                        jtDir.setText("");
+                        jtCiudad.setText("");
 
                         jbModify.setEnabled(false);
                         jbDelete.setEnabled(false);
@@ -263,7 +248,7 @@ public class VentanaGestionProveedores extends JFrame{
                 }
 
             } catch (PersistenceException pe) {
-                JOptionPane.showMessageDialog(null, "1-No existe un proveedor con ese código.\n2-El proveedor pertenece a una Gestión.", "Posibles Errores",
+                JOptionPane.showMessageDialog(null, "1-No existe un proyecto con ese código.\n2-El proyecto pertenece a una Gestión.", "Posibles Errores",
                         JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
@@ -272,7 +257,7 @@ public class VentanaGestionProveedores extends JFrame{
 
         });
 
-        // consulta por el codigo del proveedor
+        // consulta por el codigo del proyecto
         jtCodProv.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) { }
             public void removeUpdate(DocumentEvent e) {
@@ -286,17 +271,16 @@ public class VentanaGestionProveedores extends JFrame{
 
                 Session session = sessionFactory.openSession();
 
-                String hql = "from ProveedoresEntity p where p.codigo = ?1";
+                String hql = "from ProyectosEntity p where p.codigo = ?1";
 
                 Query cons = session.createQuery (hql);
                 cons.setParameter(1, jtCodProv.getText());
                 Iterator q = cons.iterate();
 
                 if (q.hasNext()) {
-                    ProveedoresEntity prov = (ProveedoresEntity) q.next();
+                    ProyectosEntity prov = (ProyectosEntity) q.next();
                     jtNombre.setText(prov.getNombre());
-                    jtApellidos.setText(prov.getApellidos());
-                    jtDir.setText(prov.getDireccion());
+                    jtCiudad.setText(prov.getCiudad());
 
                     jbModify.setEnabled(true);
                     jbDelete.setEnabled(true);
@@ -309,14 +293,13 @@ public class VentanaGestionProveedores extends JFrame{
             }
         });
 
-
         // otro panel de igual forma
         JPanel panel2 = new JPanel();
-        panelDePestanas.addTab("Lista de Proveedores", null, panel2, null);
+        panelDePestanas.addTab("Lista de Proyectos", null, panel2, null);
         panel2.setLayout(null);
 
         // otra etiqueta ésta vez en el segundo panel
-        JLabel lbl2 = new JLabel("LISTA DE PROVEEDORES - UTILIZA LOS BOTONES PARA IR DE UN REGISTRO A OTRO");
+        JLabel lbl2 = new JLabel("LISTA DE PROYECTOS - UTILIZA LOS BOTONES PARA IR DE UN REGISTRO A OTRO");
         lbl2.setBounds(20, 20, 480, 14);
         panel2.add(lbl2);
 
@@ -331,30 +314,21 @@ public class VentanaGestionProveedores extends JFrame{
 
         // Nombre proveedor
         JLabel jlNombreVer = new JLabel("Nombre:");
-        jlNombreVer.setBounds(90, 90, 200, 20);
+        jlNombreVer.setBounds(90, 110, 200, 20);
         panel2.add(jlNombreVer);
         JTextField jtNombreVer = new JTextField();
-        jtNombreVer.setBounds(180, 90, 200, 20);
+        jtNombreVer.setBounds(180, 110, 200, 20);
         jtNombreVer.setEditable(false);
         panel2.add(jtNombreVer);
 
         // Apellidos proveedor
-        JLabel jlApellidosVer = new JLabel("Apellidos:");
-        jlApellidosVer.setBounds(90, 120, 200, 20);
+        JLabel jlApellidosVer = new JLabel("Ciudad:");
+        jlApellidosVer.setBounds(90, 160, 200, 20);
         panel2.add(jlApellidosVer);
         JTextField jtApellidosVer = new JTextField();
-        jtApellidosVer.setBounds(180, 120, 240, 20);
+        jtApellidosVer.setBounds(180, 160, 240, 20);
         jtApellidosVer.setEditable(false);
         panel2.add(jtApellidosVer);
-
-        // Direccion proveedor
-        JLabel jlDirVer = new JLabel("Dirección:");
-        jlDirVer.setBounds(90, 150, 200, 20);
-        panel2.add(jlDirVer);
-        JTextField jtDirVer = new JTextField();
-        jtDirVer.setBounds(180, 150, 280, 20);
-        jtDirVer.setEditable(false);
-        panel2.add(jtDirVer);
 
         // Resgistro
         JLabel jlReg = new JLabel("REG:");
@@ -408,20 +382,8 @@ public class VentanaGestionProveedores extends JFrame{
 
         // Boton ejecutar consulta
         JButton jbEjecuteCon = new JButton("Ejecutar Consulta");
-        jbEjecuteCon.setBounds(65, 250, 280, 40);
+        jbEjecuteCon.setBounds(130, 250, 280, 40);
         panel2.add(jbEjecuteCon);
-
-        // Boton baja
-        jbBaja = new JButton("Baja");
-        jbBaja.setBounds(355, 250, 60, 40);
-        jbBaja.setEnabled(false);
-        panel2.add(jbBaja);
-
-        // Boton alta
-        jbAlta = new JButton("Alta");
-        jbAlta.setBounds(425, 250, 60, 40);
-        jbAlta.setEnabled(false);
-        panel2.add(jbAlta);
 
         // Ejecución del boton consulta
         jbEjecuteCon.addActionListener(e -> {
@@ -433,27 +395,24 @@ public class VentanaGestionProveedores extends JFrame{
 
                 consultaListaProveedores();
 
-                if (listaProveedores.size() > 0) {
+                if (listaProyectos.size() > 0) {
 
                     regActual = 0;
 
-                    comprobarAltaBaja(regActual);
-
-                    jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
-                    jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
-                    jtApellidosVer.setText(listaProveedores.get(regActual).getApellidos());
-                    jtDirVer.setText(listaProveedores.get(regActual).getDireccion());
+                    jtCodProvVer.setText(listaProyectos.get(regActual).getCodigo());
+                    jtNombreVer.setText(listaProyectos.get(regActual).getNombre());
+                    jtApellidosVer.setText(listaProyectos.get(regActual).getCiudad());
 
                     jtpag1.setText(String.valueOf(regActual + 1));
-                    jtpag2.setText(String.valueOf(listaProveedores.size()));
+                    jtpag2.setText(String.valueOf(listaProyectos.size()));
 
-                    if (listaProveedores.size() > 1) {
+                    if (listaProyectos.size() > 1) {
                         jbSigReg.setEnabled(true);
                         jbLastReg.setEnabled(true);
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(null, "No hay proveedores", "Información",
+                    JOptionPane.showMessageDialog(null, "No hay proyectos", "Información",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
 
@@ -463,7 +422,7 @@ public class VentanaGestionProveedores extends JFrame{
                     msgError = "Error con la conexión";
                 }
                 else {
-                    msgError = "No existen proveedores";
+                    msgError = "No existen proyectos";
                 }
                 JOptionPane.showMessageDialog(null, msgError, "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -479,22 +438,19 @@ public class VentanaGestionProveedores extends JFrame{
 
             try {
 
-                if (listaProveedores.size() > 1 && listaProveedores.size() < listaProveedores.size() + 1) {
+                if (listaProyectos.size() > 1 && listaProyectos.size() < listaProyectos.size() + 1) {
 
                     regActual++;
 
-                    comprobarAltaBaja(regActual);
-
-                    jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
-                    jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
-                    jtApellidosVer.setText(listaProveedores.get(regActual).getApellidos());
-                    jtDirVer.setText(listaProveedores.get(regActual).getDireccion());
+                    jtCodProvVer.setText(listaProyectos.get(regActual).getCodigo());
+                    jtNombreVer.setText(listaProyectos.get(regActual).getNombre());
+                    jtApellidosVer.setText(listaProyectos.get(regActual).getCiudad());
 
                     jtpag1.setText(String.valueOf(regActual + 1));
                     jbFistReg.setEnabled(true);
                     jbMesReg.setEnabled(true);
 
-                    if ((regActual + 1) == listaProveedores.size()) {
+                    if ((regActual + 1) == listaProyectos.size()) {
                         jbSigReg.setEnabled(false);
                         jbLastReg.setEnabled(false);
                     }
@@ -519,18 +475,15 @@ public class VentanaGestionProveedores extends JFrame{
                 jbFistReg.setEnabled(true);
                 jbMesReg.setEnabled(true);
 
-                if (listaProveedores.size() > 1 && listaProveedores.size() < listaProveedores.size() + 1) {
+                if (listaProyectos.size() > 1 && listaProyectos.size() < listaProyectos.size() + 1) {
 
-                    regActual = listaProveedores.size() - 1;
+                    regActual = listaProyectos.size() - 1;
 
-                    comprobarAltaBaja(regActual);
+                    jtCodProvVer.setText(listaProyectos.get(listaProyectos.size() - 1).getCodigo());
+                    jtNombreVer.setText(listaProyectos.get(listaProyectos.size() - 1).getNombre());
+                    jtApellidosVer.setText(listaProyectos.get(listaProyectos.size() - 1).getCiudad());
 
-                    jtCodProvVer.setText(listaProveedores.get(listaProveedores.size() - 1).getCodigo());
-                    jtNombreVer.setText(listaProveedores.get(listaProveedores.size() - 1).getNombre());
-                    jtApellidosVer.setText(listaProveedores.get(listaProveedores.size() - 1).getApellidos());
-                    jtDirVer.setText(listaProveedores.get(listaProveedores.size() - 1).getDireccion());
-
-                    jtpag1.setText(String.valueOf(listaProveedores.size()));
+                    jtpag1.setText(String.valueOf(listaProyectos.size()));
 
                 }
 
@@ -550,12 +503,9 @@ public class VentanaGestionProveedores extends JFrame{
 
                     regActual--;
 
-                    comprobarAltaBaja(regActual);
-
-                    jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
-                    jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
-                    jtApellidosVer.setText(listaProveedores.get(regActual).getApellidos());
-                    jtDirVer.setText(listaProveedores.get(regActual).getDireccion());
+                    jtCodProvVer.setText(listaProyectos.get(regActual).getCodigo());
+                    jtNombreVer.setText(listaProyectos.get(regActual).getNombre());
+                    jtApellidosVer.setText(listaProyectos.get(regActual).getCiudad());
 
                     jtpag1.setText(String.valueOf(regActual + 1));
 
@@ -585,12 +535,9 @@ public class VentanaGestionProveedores extends JFrame{
 
                     regActual = 0;
 
-                    comprobarAltaBaja(regActual);
-
-                    jtCodProvVer.setText(listaProveedores.get(regActual).getCodigo());
-                    jtNombreVer.setText(listaProveedores.get(regActual).getNombre());
-                    jtApellidosVer.setText(listaProveedores.get(regActual).getApellidos());
-                    jtDirVer.setText(listaProveedores.get(regActual).getDireccion());
+                    jtCodProvVer.setText(listaProyectos.get(regActual).getCodigo());
+                    jtNombreVer.setText(listaProyectos.get(regActual).getNombre());
+                    jtApellidosVer.setText(listaProyectos.get(regActual).getCiudad());
 
                     jtpag1.setText(String.valueOf(regActual + 1));
 
@@ -611,100 +558,6 @@ public class VentanaGestionProveedores extends JFrame{
 
         });
 
-        // Ejecución del boton baja
-        jbBaja.addActionListener(e -> {
-
-            try {
-
-                SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
-                        new StandardServiceRegistryBuilder().configure().build());
-
-                Session session = sessionFactory.openSession();
-
-                Transaction tx = session.beginTransaction();
-
-                ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProvVer.getText());
-
-                String msgInputDialog = "¿Seguro que deseas dar de baja el proveedor con código: " + jtCodProvVer.getText() + "?";
-                int input = JOptionPane.showConfirmDialog(null, msgInputDialog, "Baja", JOptionPane.YES_NO_OPTION);
-
-                if (input == 0) {
-                    prov.setEstado("BAJA");
-
-                    session.update(prov);
-                    tx.commit();
-
-                    consultaListaProveedores();
-                    jbBaja.setEnabled(false);
-                    jbAlta.setEnabled(true);
-                }
-
-                session.close();
-                sessionFactory.close();
-
-            } catch (PersistenceException pe) {
-                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-
-        });
-
-        // Ejecución del boton alta
-        jbAlta.addActionListener(e -> {
-
-            try {
-
-                SessionFactory sessionFactory = Main.cfg.buildSessionFactory(
-                        new StandardServiceRegistryBuilder().configure().build());
-
-                Session session = sessionFactory.openSession();
-
-                Transaction tx = session.beginTransaction();
-
-                ProveedoresEntity prov = session.load(ProveedoresEntity.class, jtCodProvVer.getText());
-
-                String msgInputDialog = "¿Seguro que deseas dar de alta el proveedor con código: " + jtCodProvVer.getText() + "?";
-                int input = JOptionPane.showConfirmDialog(null, msgInputDialog, "Alta", JOptionPane.YES_NO_OPTION);
-
-                if (input == 0) {
-                    prov.setEstado("ALTA");
-
-                    session.update(prov);
-                    tx.commit();
-
-                    consultaListaProveedores();
-                    jbBaja.setEnabled(true);
-                    jbAlta.setEnabled(false);
-                }
-
-                session.close();
-                sessionFactory.close();
-
-            } catch (PersistenceException pe) {
-                JOptionPane.showMessageDialog(null, "No existe un proveedor con ese código", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-
-        });
-
-    }
-
-    private void comprobarAltaBaja(int reg) {
-
-        if (listaProveedores.get(reg).getEstado().equalsIgnoreCase("ALTA")) {
-            jbAlta.setEnabled(false);
-            jbBaja.setEnabled(true);
-        } else {
-            jbBaja.setEnabled(false);
-            jbAlta.setEnabled(true);
-        }
-
     }
 
     private void consultaListaProveedores() {
@@ -714,8 +567,8 @@ public class VentanaGestionProveedores extends JFrame{
 
         Session session = sessionFactory.openSession();
 
-        Query q = session.createQuery("from ProveedoresEntity ");
-        listaProveedores = q.list();
+        Query q = session.createQuery("from ProyectosEntity ");
+        listaProyectos = q.list();
 
         session.close();
         sessionFactory.close();

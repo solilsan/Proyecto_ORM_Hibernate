@@ -127,7 +127,6 @@ public class VentanaConsultaProveedores extends JFrame {
         JTextField jtNombreProv = new JTextField();
         jtNombreProv.setBounds(250, 30, 100, 20);
         panel1.add(jtNombreProv);
-        jtNombreProv.setDocument(new JTextFieldConfig(6, false));
 
         // Boton buscar
         JButton jbBuscar = new JButton("Buscar Proveedor");
@@ -206,7 +205,6 @@ public class VentanaConsultaProveedores extends JFrame {
         JTextField jtDirProv = new JTextField();
         jtDirProv.setBounds(250, 30, 100, 20);
         panel1.add(jtDirProv);
-        jtDirProv.setDocument(new JTextFieldConfig(6, false));
 
         // Boton buscar
         JButton jbBuscar = new JButton("Buscar Proveedor");

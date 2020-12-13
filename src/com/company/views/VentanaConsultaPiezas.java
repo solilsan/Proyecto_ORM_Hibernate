@@ -129,7 +129,6 @@ public class VentanaConsultaPiezas extends JFrame {
         JTextField jtNombrePieza = new JTextField();
         jtNombrePieza.setBounds(250, 30, 100, 20);
         panel1.add(jtNombrePieza);
-        jtNombrePieza.setDocument(new JTextFieldConfig(6, false));
 
         // Boton buscar
         JButton jbBuscar = new JButton("Buscar Piezas");
@@ -209,7 +208,6 @@ public class VentanaConsultaPiezas extends JFrame {
         JTextField jtDirProv = new JTextField();
         jtDirProv.setBounds(250, 30, 100, 20);
         panel1.add(jtDirProv);
-        jtDirProv.setDocument(new JTextFieldConfig(6, false));
 
         // Boton buscar
         JButton jbBuscar = new JButton("Buscar Piezas");

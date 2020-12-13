@@ -42,6 +42,14 @@ public class VentanaListadoPiezasSuministradas extends JFrame {
                     "Código Proyecto",
                     "Cantidad Piezas"
             });
+            for (Object o : datos) {
+                Object[] dato = (Object[]) o;
+                modeloTablaCliente.addRow(new Object[]{
+                        dato[0],
+                        dato[1],
+                        dato[2]
+                });
+            }
 
         } else if (tipo.equalsIgnoreCase("PIEZAS")) {
             modeloTablaCliente.setColumnIdentifiers(new Object[]{
@@ -49,15 +57,49 @@ public class VentanaListadoPiezasSuministradas extends JFrame {
                     "Código Proyecto",
                     "Cantidad Piezas"
             });
-        }
+            for (Object o : datos) {
+                Object[] dato = (Object[]) o;
+                modeloTablaCliente.addRow(new Object[]{
+                        dato[0],
+                        dato[1],
+                        dato[2]
+                });
+            }
 
-        for (Object o : datos) {
-            Object[] dato = (Object[]) o;
-            modeloTablaCliente.addRow(new Object[]{
-                    dato[0],
-                    dato[1],
-                    dato[2]
+        } else if (tipo.equalsIgnoreCase("PROYECTOS")) {
+            modeloTablaCliente.setColumnIdentifiers(new Object[]{
+                    "Código Proyecto",
+                    "Nombre Proyecto",
+                    "Ciudad Proyecto",
+                    "Cantidad Piezas"
             });
+            for (Object o : datos) {
+                Object[] dato = (Object[]) o;
+                modeloTablaCliente.addRow(new Object[]{
+                        dato[0],
+                        dato[1],
+                        dato[2],
+                        dato[3]
+                });
+            }
+
+        } else if (tipo.equalsIgnoreCase("PROVEEDORESP")) {
+            modeloTablaCliente.setColumnIdentifiers(new Object[]{
+                    "Código Proveedor",
+                    "Nombre Proveedor",
+                    "Apellidos Proveedor",
+                    "Cantidad Piezas"
+            });
+            for (Object o : datos) {
+                Object[] dato = (Object[]) o;
+                modeloTablaCliente.addRow(new Object[]{
+                        dato[0],
+                        dato[1],
+                        dato[2],
+                        dato[3]
+                });
+            }
+
         }
 
         table1.setModel(modeloTablaCliente);

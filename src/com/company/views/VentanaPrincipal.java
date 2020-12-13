@@ -1,7 +1,11 @@
 package com.company.views;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -211,9 +215,38 @@ public class VentanaPrincipal extends JFrame {
                 }
         );
 
+        var estadisticasGestionItem = new JMenuItem("Estadísticas");
+        estadisticasGestionItem.addActionListener(
+                (event) -> {
+                    VentanaEstadisticas vgp = new VentanaEstadisticas();
+                    vgp.setLocationRelativeTo(null);
+                    vgp.setVisible(true);
+                }
+        );
+
         globalMenu.add(globalGestionItem);
         globalMenu.add(suministrosProvGestionItem);
         globalMenu.add(suministrosPiezaGestionItem);
+        globalMenu.add(estadisticasGestionItem);
+
+        // Menú global
+        var ayudaMenu = new JMenu("Ayuda");
+        menuBar.add(ayudaMenu);
+
+        var videoGestionItem = new JMenuItem("Video");
+        videoGestionItem.addActionListener(
+                (event) -> {
+                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                        try {
+                            Desktop.getDesktop().browse(new URI("http://www.google.com"));
+                        } catch (IOException | URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        );
+
+        ayudaMenu.add(videoGestionItem);
 
         setJMenuBar(menuBar);
     }

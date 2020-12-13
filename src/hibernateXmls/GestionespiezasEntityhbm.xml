@@ -14,5 +14,8 @@
         <property name="codgestion">
             <column name="CODGESTION" sql-type="int"/>
         </property>
+        <property name="cantidad">
+            <column name="CANTIDAD" sql-type="double"/>
+        </property>
     </class>
 </hibernate-mapping>

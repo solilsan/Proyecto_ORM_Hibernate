@@ -70,8 +70,8 @@ public class VentanaListadoPiezasSuministradas extends JFrame {
             modeloTablaCliente.setColumnIdentifiers(new Object[]{
                     "Código Proyecto",
                     "Nombre Proyecto",
-                    "Ciudad Proyecto",
-                    "Cantidad Piezas"
+                    "Cantidad Piezas",
+                    "Nº Piezas"
             });
             for (Object o : datos) {
                 Object[] dato = (Object[]) o;
@@ -87,8 +87,8 @@ public class VentanaListadoPiezasSuministradas extends JFrame {
             modeloTablaCliente.setColumnIdentifiers(new Object[]{
                     "Código Proveedor",
                     "Nombre Proveedor",
-                    "Apellidos Proveedor",
-                    "Cantidad Piezas"
+                    "Cantidad Piezas",
+                    "Nº Piezas"
             });
             for (Object o : datos) {
                 Object[] dato = (Object[]) o;

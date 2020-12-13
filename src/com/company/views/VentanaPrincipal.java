@@ -238,7 +238,7 @@ public class VentanaPrincipal extends JFrame {
                 (event) -> {
                     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                         try {
-                            Desktop.getDesktop().browse(new URI("http://www.google.com"));
+                            Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=JiDaqV8SEk0&feature=youtu.be"));
                         } catch (IOException | URISyntaxException e) {
                             e.printStackTrace();
                         }

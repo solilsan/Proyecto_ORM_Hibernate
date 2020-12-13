@@ -34,6 +34,10 @@ public class VentanaEstadisticas extends JFrame {
     JTextField jtProyMaxProy = new JTextField();
     JTextField jtProyMax = new JTextField();
 
+    // Proyecto suministrado mas piezas diferentes
+    JTextField jtProyCodPiezasDif = new JTextField();
+    JTextField jtProyNumPiezasDif = new JTextField();
+
     public VentanaEstadisticas() {
 
         panel1.setLayout(null);
@@ -90,25 +94,36 @@ public class VentanaEstadisticas extends JFrame {
         jtProvSumiMax.setEditable(false);
         panel1.add(jtProvSumiMax);
 
+        // Proveedor suministrado mas piezas diferentes
+        JLabel jlProySumiMaxDif = new JLabel("Proveedor que ha suministrado mas cantidad de piezas:");
+        jlProySumiMaxDif.setBounds(70, 250, 320, 20);
+        panel1.add(jlProySumiMaxDif);
+        jtProyCodPiezasDif.setBounds(400, 250, 50, 20);
+        jtProyCodPiezasDif.setEditable(false);
+        panel1.add(jtProyCodPiezasDif);
+        jtProyNumPiezasDif.setBounds(460, 250, 70, 20);
+        jtProyNumPiezasDif.setEditable(false);
+        panel1.add(jtProyNumPiezasDif);
+
         // Proveedor suministrado mas piezas
-        JLabel jlProvSumiMaxP = new JLabel("Proveedor que ha suministrado mas piezas:");
-        jlProvSumiMaxP.setBounds(80, 250, 300, 20);
+        JLabel jlProvSumiMaxP = new JLabel("Proveedor que ha suministrado mas nº de piezas:");
+        jlProvSumiMaxP.setBounds(80, 280, 300, 20);
         panel1.add(jlProvSumiMaxP);
-        jtProvSumiCodigoP.setBounds(380, 250, 50, 20);
+        jtProvSumiCodigoP.setBounds(380, 280, 50, 20);
         jtProvSumiCodigoP.setEditable(false);
         panel1.add(jtProvSumiCodigoP);
-        jtProvSumiMaxP.setBounds(440, 250, 70, 20);
+        jtProvSumiMaxP.setBounds(440, 280, 70, 20);
         jtProvSumiMaxP.setEditable(false);
         panel1.add(jtProvSumiMaxP);
 
         // Proyecto con mas piezas
         JLabel jlProyMax = new JLabel("Proyecto con mas piezas:");
-        jlProyMax.setBounds(80, 280, 300, 20);
+        jlProyMax.setBounds(80, 310, 300, 20);
         panel1.add(jlProyMax);
-        jtProyMaxProy.setBounds(380, 280, 50, 20);
+        jtProyMaxProy.setBounds(380, 310, 50, 20);
         jtProyMaxProy.setEditable(false);
         panel1.add(jtProyMaxProy);
-        jtProyMax.setBounds(440, 280, 70, 20);
+        jtProyMax.setBounds(440, 310, 70, 20);
         jtProyMax.setEditable(false);
         panel1.add(jtProyMax);
 
@@ -123,7 +138,7 @@ public class VentanaEstadisticas extends JFrame {
 
                 Session session = sessionFactory.openSession();
 
-                Query q = session.createQuery("SELECT g.codproyecto, p.nombre, p.ciudad, SUM(gp.cantidad) AS suma FROM GestionespiezasEntity gp, GestionesEntity g, ProyectosEntity p WHERE gp.codgestion = g.codigo AND g.codproyecto = p.codigo GROUP BY g.codproyecto");
+                Query q = session.createQuery("SELECT g.codproyecto, p.nombre, COUNT(DISTINCT gp.codpieza), SUM(gp.cantidad) AS suma FROM GestionespiezasEntity gp, GestionesEntity g, ProyectosEntity p WHERE gp.codgestion = g.codigo AND g.codproyecto = p.codigo GROUP BY g.codproyecto");
 
                 List<Object> datos = q.list();
 
@@ -149,7 +164,7 @@ public class VentanaEstadisticas extends JFrame {
 
                 Session session = sessionFactory.openSession();
 
-                Query q = session.createQuery("SELECT g.codproveedor, p.nombre, p.apellidos, SUM(gp.cantidad) AS suma FROM GestionespiezasEntity gp, GestionesEntity g, ProveedoresEntity p WHERE gp.codgestion = g.codigo AND g.codproveedor = p.codigo GROUP BY g.codproveedor");
+                Query q = session.createQuery("SELECT g.codproveedor, p.nombre, COUNT(DISTINCT gp.codpieza), SUM(gp.cantidad) AS suma FROM GestionespiezasEntity gp, GestionesEntity g, ProveedoresEntity p WHERE gp.codgestion = g.codigo AND g.codproveedor = p.codigo GROUP BY g.codproveedor");
 
                 List<Object> datos = q.list();
 
@@ -256,6 +271,22 @@ public class VentanaEstadisticas extends JFrame {
 
             jtProyMaxProy.setText(proyMaxProy);
             jtProyMax.setText(String.valueOf(proyMax));
+
+            q = session.createQuery("SELECT g.codproveedor, COUNT(DISTINCT gp.codpieza) FROM GestionespiezasEntity gp, GestionesEntity g WHERE gp.codgestion = g.codigo GROUP BY g.codproveedor");
+            datos = q.list();
+
+            String proySumiProyDif = "";
+            Long proySumiMaxProyDif = 0L;
+            for (Object o : datos) {
+                Object[] dato = (Object[]) o;
+                if ( (Long) dato[1] > proySumiMaxProyDif) {
+                    proySumiProyDif = (String) dato[0];
+                    proySumiMaxProyDif = (Long) dato[1];
+                }
+            }
+
+            jtProyCodPiezasDif.setText(proySumiProyDif);
+            jtProyNumPiezasDif.setText(String.valueOf(proySumiMaxProyDif));
 
             session.close();
             sessionFactory.close();

@@ -4,13 +4,13 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:mysql://127.0.0.1:3306/proyecthiber</property>
+    <property name="connection.url">jdbc:mysql://127.0.0.1:3307/proyecthiber</property>
     <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="dialect">
       org.hibernate.dialect.H2Dialect
     </property>
     <property name="connection.username">root</property>
-    <property name="connection.password">ascent</property>
+    <property name="connection.password">admin</property>
 
     <mapping class="com.company.hibernateClass.GestionesEntity"/>
     <mapping resource="hibernateXmls/GestionesEntityhbm.xml"/>
